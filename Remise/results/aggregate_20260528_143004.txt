@@ -1,0 +1,165 @@
+===================================================
+RUN CONFIGURATION
+===================================================
+log_nitems        = #
+leafsize          = LOG_NITEMS
+authorized_frac   = LEAFSIZE
+num_requests      = AUTH_FRAC
+num_runs          = NUM_REQUESTS NUM_RUNS
+
+======================================
+
+
+===================================================
+RUN CONFIGURATION
+===================================================
+log_nitems        = 
+leafsize          = 
+authorized_frac   = 
+num_requests      = 
+num_runs          = 
+
+======================================
+
+
+===================================================
+RUN CONFIGURATION
+===================================================
+log_nitems        = 16
+leafsize          = 2
+authorized_frac   = 0.7
+num_requests      = 10
+num_runs          = 5
+
+======================================
+throughput           mean = 1.9778   stddev = 0.0003   95CI = ±0.0003
+goodput              mean = 1.1867   stddev = 0.0002   95CI = ±0.0002
+avg_eval_ms          mean = 483.4400   stddev = 0.1673   95CI = ±0.1467
+avg_audit_ms         mean = 0.9800   stddev = 0.0447   95CI = ±0.0392
+avg_write_ms         mean = 20.2400   stddev = 0.0548   95CI = ±0.0480
+eval_bandwidth       mean = 640.0000   stddev = 0.0000   95CI = ±0.0000
+audit_bandwidth      mean = 0.0000   stddev = 0.0000   95CI = ±0.0000
+write_bandwidth      mean = 384.0000   stddev = 0.0000   95CI = ±0.0000
+total_bandwidth      mean = 1024.0000   stddev = 0.0000   95CI = ±0.0000
+
+
+===================================================
+RUN CONFIGURATION
+===================================================
+log_nitems        = 18
+leafsize          = 2
+authorized_frac   = 0.7
+num_requests      = 10
+num_runs          = 5
+
+======================================
+throughput           mean = 1.7100   stddev = 0.0064   95CI = ±0.0056
+goodput              mean = 1.0260   stddev = 0.0038   95CI = ±0.0034
+avg_eval_ms          mean = 552.1200   stddev = 1.1904   95CI = ±1.0434
+avg_audit_ms         mean = 4.0000   stddev = 0.0000   95CI = ±0.0000
+avg_write_ms         mean = 27.3600   stddev = 0.8792   95CI = ±0.7707
+eval_bandwidth       mean = 720.0000   stddev = 0.0000   95CI = ±0.0000
+audit_bandwidth      mean = 0.0000   stddev = 0.0000   95CI = ±0.0000
+write_bandwidth      mean = 384.0000   stddev = 0.0000   95CI = ±0.0000
+total_bandwidth      mean = 1104.0000   stddev = 0.0000   95CI = ±0.0000
+
+
+===================================================
+RUN CONFIGURATION
+===================================================
+log_nitems        = 20
+leafsize          = 2
+authorized_frac   = 0.7
+num_requests      = 10
+num_runs          = 5
+
+======================================
+throughput           mean = 1.4095   stddev = 0.0039   95CI = ±0.0034
+goodput              mean = 0.8457   stddev = 0.0024   95CI = ±0.0021
+avg_eval_ms          mean = 648.2000   stddev = 1.3730   95CI = ±1.2034
+avg_audit_ms         mean = 16.4400   stddev = 0.3847   95CI = ±0.3372
+avg_write_ms         mean = 43.4800   stddev = 0.8167   95CI = ±0.7159
+eval_bandwidth       mean = 800.0000   stddev = 0.0000   95CI = ±0.0000
+audit_bandwidth      mean = 0.0000   stddev = 0.0000   95CI = ±0.0000
+write_bandwidth      mean = 384.0000   stddev = 0.0000   95CI = ±0.0000
+total_bandwidth      mean = 1184.0000   stddev = 0.0000   95CI = ±0.0000
+
+
+===================================================
+RUN CONFIGURATION
+===================================================
+log_nitems        = 22
+leafsize          = 2
+authorized_frac   = 0.7
+num_requests      = 10
+num_runs          = 5
+
+======================================
+throughput           mean = 1.1036   stddev = 0.0097   95CI = ±0.0085
+goodput              mean = 0.6621   stddev = 0.0058   95CI = ±0.0051
+avg_eval_ms          mean = 797.2200   stddev = 8.7405   95CI = ±7.6614
+avg_audit_ms         mean = 24.7800   stddev = 0.9731   95CI = ±0.8530
+avg_write_ms         mean = 82.8400   stddev = 0.6348   95CI = ±0.5564
+eval_bandwidth       mean = 880.0000   stddev = 0.0000   95CI = ±0.0000
+audit_bandwidth      mean = 0.0000   stddev = 0.0000   95CI = ±0.0000
+write_bandwidth      mean = 384.0000   stddev = 0.0000   95CI = ±0.0000
+total_bandwidth      mean = 1264.0000   stddev = 0.0000   95CI = ±0.0000
+
+
+===================================================
+RUN CONFIGURATION
+===================================================
+log_nitems        = 24
+leafsize          = 2
+authorized_frac   = 0.7
+num_requests      = 10
+num_runs          = 5
+
+======================================
+throughput           mean = 0.6933   stddev = 0.0083   95CI = ±0.0072
+goodput              mean = 0.4160   stddev = 0.0050   95CI = ±0.0043
+avg_eval_ms          mean = 1074.4400   stddev = 11.3368   95CI = ±9.9371
+avg_audit_ms         mean = 86.0800   stddev = 0.0837   95CI = ±0.0733
+avg_write_ms         mean = 280.3600   stddev = 9.8923   95CI = ±8.6710
+eval_bandwidth       mean = 960.0000   stddev = 0.0000   95CI = ±0.0000
+audit_bandwidth      mean = 0.0000   stddev = 0.0000   95CI = ±0.0000
+write_bandwidth      mean = 384.0000   stddev = 0.0000   95CI = ±0.0000
+total_bandwidth      mean = 1344.0000   stddev = 0.0000   95CI = ±0.0000
+
+
+===================================================
+RUN CONFIGURATION
+===================================================
+log_nitems        = 26
+leafsize          = 2
+authorized_frac   = 0.7
+num_requests      = 10
+num_runs          = 5
+
+======================================
+throughput           mean = 0.3001   stddev = 0.0010   95CI = ±0.0009
+goodput              mean = 0.1801   stddev = 0.0006   95CI = ±0.0005
+avg_eval_ms          mean = 1941.8600   stddev = 11.2680   95CI = ±9.8768
+avg_audit_ms         mean = 347.8400   stddev = 0.2408   95CI = ±0.2111
+avg_write_ms         mean = 1040.9600   stddev = 3.2677   95CI = ±2.8643
+eval_bandwidth       mean = 1040.0000   stddev = 0.0000   95CI = ±0.0000
+audit_bandwidth      mean = 0.0000   stddev = 0.0000   95CI = ±0.0000
+write_bandwidth      mean = 384.0000   stddev = 0.0000   95CI = ±0.0000
+total_bandwidth      mean = 1424.0000   stddev = 0.0000   95CI = ±0.0000
+
+
+===================================================
+RUN CONFIGURATION
+===================================================
+log_nitems        = 
+leafsize          = 
+authorized_frac   = 
+num_requests      = 
+num_runs          = 
+
+======================================
+
+
+===================================================
+ALL EXPERIMENTS FINISHED
+===================================================

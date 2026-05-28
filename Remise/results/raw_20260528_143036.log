@@ -1,0 +1,5845 @@
+======================================
+RUN 1 / 5
+======================================
+--- P0 OUTPUT ---
+target_val = 6572350447247816129
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 57 ms
+Send Time: 0
+Recv Time: 57
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Advice exchange: 55 ms
+Send Time: 0
+Recv Time: 55
+Advice exchange: 4 ms
+Send Time: 0
+Recv Time: 4
+Advice exchange: 55 ms
+Send Time: 0
+Recv Time: 55
+Advice exchange: 4 ms
+Send Time: 0
+Recv Time: 4
+Advice exchange: 55 ms
+Send Time: 0
+Recv Time: 55
+Advice exchange: 4 ms
+Send Time: 0
+Recv Time: 4
+Advice exchange: 55 ms
+Send Time: 0
+Recv Time: 55
+Advice exchange: 4 ms
+Send Time: 0
+Recv Time: 4
+Advice exchange: 55 ms
+Send Time: 0
+Recv Time: 55
+Advice exchange: 4 ms
+Send Time: 0
+Recv Time: 4
+Advice exchange: 55 ms
+Send Time: 0
+Recv Time: 55
+Advice exchange: 4 ms
+Send Time: 0
+Recv Time: 4
+Advice exchange: 55 ms
+Send Time: 0
+Recv Time: 55
+Advice exchange: 4 ms
+Send Time: 0
+Recv Time: 4
+Advice exchange: 55 ms
+Send Time: 0
+Recv Time: 55
+Advice exchange: 3 ms
+Send Time: 0
+Recv Time: 3
+Advice exchange: 54 ms
+Send Time: 0
+Recv Time: 54
+Advice exchange: 2 ms
+Send Time: 0
+Recv Time: 2
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 1 ms
+Send Time: 0
+Recv Time: 1
+Advice exchange: 58 ms
+Send Time: 0
+Recv Time: 58
+Advice exchange: 1 ms
+Send Time: 0
+Recv Time: 1
+Advice exchange: 58 ms
+Send Time: 0
+Recv Time: 58
+Advice exchange: 1 ms
+Send Time: 0
+Recv Time: 1
+Advice exchange: 58 ms
+Send Time: 0
+Recv Time: 58
+Advice exchange: 1 ms
+Send Time: 0
+Recv Time: 1
+Advice exchange: 58 ms
+Send Time: 0
+Recv Time: 58
+Advice exchange: 1 ms
+Send Time: 0
+Recv Time: 1
+Advice exchange: 58 ms
+Send Time: 0
+Recv Time: 58
+Advice exchange: 1 ms
+Send Time: 0
+Recv Time: 1
+Advice exchange: 58 ms
+Send Time: 0
+Recv Time: 58
+Advice exchange: 1 ms
+Send Time: 0
+Recv Time: 1
+Advice exchange: 58 ms
+Send Time: 0
+Recv Time: 58
+Advice exchange: 1 ms
+Send Time: 0
+Recv Time: 1
+Advice exchange: 57 ms
+Send Time: 0
+Recv Time: 57
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 56 ms
+Send Time: 0
+Recv Time: 56
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 56 ms
+Send Time: 0
+Recv Time: 56
+Advice exchange: 3 ms
+Send Time: 0
+Recv Time: 3
+Advice exchange: 56 ms
+Send Time: 0
+Recv Time: 56
+Advice exchange: 3 ms
+Send Time: 0
+Recv Time: 3
+Advice exchange: 56 ms
+Send Time: 0
+Recv Time: 56
+Advice exchange: 3 ms
+Send Time: 0
+Recv Time: 3
+Advice exchange: 56 ms
+Send Time: 0
+Recv Time: 56
+Advice exchange: 3 ms
+Send Time: 0
+Recv Time: 3
+Advice exchange: 56 ms
+Send Time: 0
+Recv Time: 56
+Advice exchange: 3 ms
+Send Time: 0
+Recv Time: 3
+Advice exchange: 56 ms
+Send Time: 0
+Recv Time: 56
+Advice exchange: 3 ms
+Send Time: 0
+Recv Time: 3
+Advice exchange: 56 ms
+Send Time: 0
+Recv Time: 56
+Advice exchange: 3 ms
+Send Time: 0
+Recv Time: 3
+Advice exchange: 56 ms
+Send Time: 0
+Recv Time: 56
+Advice exchange: 3 ms
+Send Time: 0
+Recv Time: 3
+Advice exchange: 55 ms
+Send Time: 0
+Recv Time: 55
+Advice exchange: 1 ms
+Send Time: 0
+Recv Time: 1
+nodes_in_interval = 262144
+Advice exchange: 54 ms
+Send Time: 0
+Recv Time: 54
+Advice exchange: 5 ms
+Send Time: 0
+Recv Time: 5
+Advice exchange: 54 ms
+Send Time: 0
+Recv Time: 54
+Advice exchange: 5 ms
+Send Time: 0
+Recv Time: 5
+Advice exchange: 54 ms
+Send Time: 0
+Recv Time: 54
+Advice exchange: 5 ms
+Send Time: 0
+Recv Time: 5
+Advice exchange: 54 ms
+Send Time: 0
+Recv Time: 54
+Advice exchange: 5 ms
+Send Time: 0
+Recv Time: 5
+Advice exchange: 54 ms
+Send Time: 0
+Recv Time: 54
+Advice exchange: 5 ms
+Send Time: 0
+Recv Time: 5
+Advice exchange: 54 ms
+Send Time: 0
+Recv Time: 54
+Advice exchange: 5 ms
+Send Time: 0
+Recv Time: 5
+Advice exchange: 54 ms
+Send Time: 0
+Recv Time: 54
+Advice exchange: 5 ms
+Send Time: 0
+Recv Time: 5
+Advice exchange: 53 ms
+Send Time: 0
+Recv Time: 53
+Advice exchange: 5 ms
+Send Time: 0
+Recv Time: 5
+Advice exchange: 53 ms
+Send Time: 0
+Recv Time: 53
+Advice exchange: 3 ms
+Send Time: 0
+Recv Time: 3
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 10 ms
+Send Time: 0
+Recv Time: 10
+Advice exchange: 49 ms
+Send Time: 0
+Recv Time: 49
+Advice exchange: 10 ms
+Send Time: 0
+Recv Time: 10
+Advice exchange: 49 ms
+Send Time: 0
+Recv Time: 49
+Advice exchange: 10 ms
+Send Time: 0
+Recv Time: 10
+Advice exchange: 49 ms
+Send Time: 0
+Recv Time: 49
+Advice exchange: 10 ms
+Send Time: 0
+Recv Time: 10
+Advice exchange: 49 ms
+Send Time: 0
+Recv Time: 49
+Advice exchange: 10 ms
+Send Time: 0
+Recv Time: 10
+Advice exchange: 49 ms
+Send Time: 0
+Recv Time: 49
+Advice exchange: 10 ms
+Send Time: 0
+Recv Time: 10
+Advice exchange: 49 ms
+Send Time: 0
+Recv Time: 49
+Advice exchange: 10 ms
+Send Time: 0
+Recv Time: 10
+Advice exchange: 49 ms
+Send Time: 0
+Recv Time: 49
+Advice exchange: 9 ms
+Send Time: 0
+Recv Time: 9
+Advice exchange: 49 ms
+Send Time: 0
+Recv Time: 49
+Advice exchange: 9 ms
+Send Time: 0
+Recv Time: 9
+Advice exchange: 47 ms
+Send Time: 0
+Recv Time: 47
+nodes_in_interval = 262144
+Advice exchange: 7 ms
+Send Time: 0
+Recv Time: 7
+Advice exchange: 52 ms
+Send Time: 0
+Recv Time: 52
+Advice exchange: 7 ms
+Send Time: 0
+Recv Time: 7
+Advice exchange: 52 ms
+Send Time: 0
+Recv Time: 52
+Advice exchange: 7 ms
+Send Time: 0
+Recv Time: 7
+Advice exchange: 52 ms
+Send Time: 0
+Recv Time: 52
+Advice exchange: 7 ms
+Send Time: 0
+Recv Time: 7
+Advice exchange: 52 ms
+Send Time: 0
+Recv Time: 52
+Advice exchange: 7 ms
+Send Time: 0
+Recv Time: 7
+Advice exchange: 52 ms
+Send Time: 0
+Recv Time: 52
+Advice exchange: 7 ms
+Send Time: 0
+Recv Time: 7
+Advice exchange: 52 ms
+Send Time: 0
+Recv Time: 52
+Advice exchange: 7 ms
+Send Time: 0
+Recv Time: 7
+Advice exchange: 52 ms
+Send Time: 0
+Recv Time: 52
+Advice exchange: 7 ms
+Send Time: 0
+Recv Time: 7
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+nodes_in_interval = 262144
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+nodes_in_interval = 262144
+Finalize
+
+========== Experiment Summary ==========
+Total requests           : 10
+Authorized requests      : 6
+Cover requests           : 4
+Authorized fraction      : 0.6
+
+--- Latency ---
+Average eval latency     : 550 ms
+Average audit latency    : 4 ms
+Average write latency    : 25.8 ms
+
+--- Bandwidth ---
+Eval bandwidth           : 720 bytes
+Audit bandwidth          : 0 bytes
+Write bandwidth          : 384 bytes
+Total bandwidth          : 1104 bytes
+
+--- Throughput ---
+Throughput               : 1.72147 req/sec
+Goodput                  : 1.03288 authorized req/sec
+========================================
+P0 : sent=553 bytes, recv=552 bytes, total=1105 bytes
+
+--- P1 OUTPUT ---
+target_val = 0
+[P1] dummy = 1
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 2 ms
+Send Time: 0
+Recv Time: 2
+Advice exchange: 61 ms
+Send Time: 0
+Recv Time: 61
+nodes_in_interval = 262144
+Advice exchange: 4 ms
+Send Time: 0
+Recv Time: 4
+Advice exchange: 55 ms
+Send Time: 0
+Recv Time: 55
+Advice exchange: 4 ms
+Send Time: 0
+Recv Time: 4
+Advice exchange: 55 ms
+Send Time: 0
+Recv Time: 55
+Advice exchange: 4 ms
+Send Time: 0
+Recv Time: 4
+Advice exchange: 55 ms
+Send Time: 0
+Recv Time: 55
+Advice exchange: 4 ms
+Send Time: 0
+Recv Time: 4
+Advice exchange: 55 ms
+Send Time: 0
+Recv Time: 55
+Advice exchange: 4 ms
+Send Time: 0
+Recv Time: 4
+Advice exchange: 55 ms
+Send Time: 0
+Recv Time: 55
+Advice exchange: 4 ms
+Send Time: 0
+Recv Time: 4
+Advice exchange: 55 ms
+Send Time: 0
+Recv Time: 55
+Advice exchange: 4 ms
+Send Time: 0
+Recv Time: 4
+Advice exchange: 55 ms
+Send Time: 0
+Recv Time: 55
+Advice exchange: 4 ms
+Send Time: 0
+Recv Time: 4
+Advice exchange: 56 ms
+Send Time: 0
+Recv Time: 56
+Advice exchange: 5 ms
+Send Time: 0
+Recv Time: 5
+Advice exchange: 57 ms
+Send Time: 0
+Recv Time: 57
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 58 ms
+Send Time: 0
+Recv Time: 58
+Advice exchange: 1 ms
+Send Time: 0
+Recv Time: 1
+Advice exchange: 58 ms
+Send Time: 0
+Recv Time: 58
+Advice exchange: 1 ms
+Send Time: 0
+Recv Time: 1
+Advice exchange: 58 ms
+Send Time: 0
+Recv Time: 58
+Advice exchange: 1 ms
+Send Time: 0
+Recv Time: 1
+Advice exchange: 58 ms
+Send Time: 0
+Recv Time: 58
+Advice exchange: 1 ms
+Send Time: 0
+Recv Time: 1
+Advice exchange: 58 ms
+Send Time: 0
+Recv Time: 58
+Advice exchange: 1 ms
+Send Time: 0
+Recv Time: 1
+Advice exchange: 58 ms
+Send Time: 0
+Recv Time: 58
+Advice exchange: 1 ms
+Send Time: 0
+Recv Time: 1
+Advice exchange: 58 ms
+Send Time: 0
+Recv Time: 58
+Advice exchange: 1 ms
+Send Time: 0
+Recv Time: 1
+Advice exchange: 58 ms
+Send Time: 0
+Recv Time: 58
+Advice exchange: 2 ms
+Send Time: 0
+Recv Time: 2
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 3 ms
+Send Time: 0
+Recv Time: 3
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 3 ms
+Send Time: 0
+Recv Time: 3
+Advice exchange: 56 ms
+Send Time: 0
+Recv Time: 56
+Advice exchange: 3 ms
+Send Time: 0
+Recv Time: 3
+Advice exchange: 56 ms
+Send Time: 0
+Recv Time: 56
+Advice exchange: 3 ms
+Send Time: 0
+Recv Time: 3
+Advice exchange: 56 ms
+Send Time: 0
+Recv Time: 56
+Advice exchange: 3 ms
+Send Time: 0
+Recv Time: 3
+Advice exchange: 56 ms
+Send Time: 0
+Recv Time: 56
+Advice exchange: 3 ms
+Send Time: 0
+Recv Time: 3
+Advice exchange: 56 ms
+Send Time: 0
+Recv Time: 56
+Advice exchange: 3 ms
+Send Time: 0
+Recv Time: 3
+Advice exchange: 56 ms
+Send Time: 0
+Recv Time: 56
+Advice exchange: 3 ms
+Send Time: 0
+Recv Time: 3
+Advice exchange: 56 ms
+Send Time: 0
+Recv Time: 56
+Advice exchange: 3 ms
+Send Time: 0
+Recv Time: 3
+Advice exchange: 57 ms
+Send Time: 0
+Recv Time: 57
+Advice exchange: 4 ms
+Send Time: 0
+Recv Time: 4
+Advice exchange: 58 ms
+Send Time: 0
+Recv Time: 58
+nodes_in_interval = 262144
+Advice exchange: 6 ms
+Send Time: 0
+Recv Time: 6
+Advice exchange: 54 ms
+Send Time: 0
+Recv Time: 54
+Advice exchange: 5 ms
+Send Time: 0
+Recv Time: 5
+Advice exchange: 54 ms
+Send Time: 0
+Recv Time: 54
+Advice exchange: 5 ms
+Send Time: 0
+Recv Time: 5
+Advice exchange: 54 ms
+Send Time: 0
+Recv Time: 54
+Advice exchange: 5 ms
+Send Time: 0
+Recv Time: 5
+Advice exchange: 54 ms
+Send Time: 0
+Recv Time: 54
+Advice exchange: 5 ms
+Send Time: 0
+Recv Time: 5
+Advice exchange: 54 ms
+Send Time: 0
+Recv Time: 54
+Advice exchange: 5 ms
+Send Time: 0
+Recv Time: 5
+Advice exchange: 54 ms
+Send Time: 0
+Recv Time: 54
+Advice exchange: 5 ms
+Send Time: 0
+Recv Time: 5
+Advice exchange: 54 ms
+Send Time: 0
+Recv Time: 54
+Advice exchange: 6 ms
+Send Time: 0
+Recv Time: 6
+Advice exchange: 54 ms
+Send Time: 0
+Recv Time: 54
+Advice exchange: 6 ms
+Send Time: 0
+Recv Time: 6
+Advice exchange: 56 ms
+Send Time: 0
+Recv Time: 56
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 49 ms
+Send Time: 0
+Recv Time: 49
+Advice exchange: 10 ms
+Send Time: 0
+Recv Time: 10
+Advice exchange: 49 ms
+Send Time: 0
+Recv Time: 49
+Advice exchange: 10 ms
+Send Time: 0
+Recv Time: 10
+Advice exchange: 49 ms
+Send Time: 0
+Recv Time: 49
+Advice exchange: 10 ms
+Send Time: 0
+Recv Time: 10
+Advice exchange: 49 ms
+Send Time: 0
+Recv Time: 49
+Advice exchange: 10 ms
+Send Time: 0
+Recv Time: 10
+Advice exchange: 49 ms
+Send Time: 0
+Recv Time: 49
+Advice exchange: 10 ms
+Send Time: 0
+Recv Time: 10
+Advice exchange: 49 ms
+Send Time: 0
+Recv Time: 49
+Advice exchange: 10 ms
+Send Time: 0
+Recv Time: 10
+Advice exchange: 50 ms
+Send Time: 0
+Recv Time: 50
+Advice exchange: 10 ms
+Send Time: 0
+Recv Time: 10
+Advice exchange: 50 ms
+Send Time: 0
+Recv Time: 50
+Advice exchange: 10 ms
+Send Time: 0
+Recv Time: 10
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 12 ms
+Send Time: 0
+Recv Time: 12
+nodes_in_interval = 262144
+Advice exchange: 52 ms
+Send Time: 0
+Recv Time: 52
+Advice exchange: 7 ms
+Send Time: 0
+Recv Time: 7
+Advice exchange: 52 ms
+Send Time: 0
+Recv Time: 52
+Advice exchange: 7 ms
+Send Time: 0
+Recv Time: 7
+Advice exchange: 52 ms
+Send Time: 0
+Recv Time: 52
+Advice exchange: 7 ms
+Send Time: 0
+Recv Time: 7
+Advice exchange: 52 ms
+Send Time: 0
+Recv Time: 52
+Advice exchange: 7 ms
+Send Time: 0
+Recv Time: 7
+Advice exchange: 52 ms
+Send Time: 0
+Recv Time: 52
+Advice exchange: 7 ms
+Send Time: 0
+Recv Time: 7
+Advice exchange: 52 ms
+Send Time: 0
+Recv Time: 52
+Advice exchange: 7 ms
+Send Time: 0
+Recv Time: 7
+Advice exchange: 52 ms
+Send Time: 0
+Recv Time: 52
+Advice exchange: 7 ms
+Send Time: 0
+Recv Time: 7
+Advice exchange: 52 ms
+Send Time: 0
+Recv Time: 52
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+nodes_in_interval = 262144
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+Advice exchange: 51 ms
+Send Time: 0
+Recv Time: 51
+Advice exchange: 8 ms
+Send Time: 0
+Recv Time: 8
+nodes_in_interval = 262144
+Finalize
+
+========== Experiment Summary ==========
+Total requests           : 10
+Authorized requests      : 6
+Cover requests           : 4
+Authorized fraction      : 0.6
+
+--- Latency ---
+Average eval latency     : 550.1 ms
+Average audit latency    : 2.2 ms
+Average write latency    : 26.5 ms
+
+--- Bandwidth ---
+Eval bandwidth           : 720 bytes
+Audit bandwidth          : 0 bytes
+Write bandwidth          : 384 bytes
+Total bandwidth          : 1104 bytes
+
+--- Throughput ---
+Throughput               : 1.72384 req/sec
+Goodput                  : 1.0343 authorized req/sec
+========================================
+P0 : sent=552 bytes, recv=553 bytes, total=1105 bytes
+
+
+======================================
+RUN 2 / 5
+======================================
+--- P0 OUTPUT ---
+target_val = 8749351479900290509
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+nodes_in_interval = 262144
+Finalize
+
+========== Experiment Summary ==========
+Total requests           : 10
+Authorized requests      : 6
+Cover requests           : 4
+Authorized fraction      : 0.6
+
+--- Latency ---
+Average eval latency     : 552.7 ms
+Average audit latency    : 4 ms
+Average write latency    : 27.8 ms
+
+--- Bandwidth ---
+Eval bandwidth           : 720 bytes
+Audit bandwidth          : 0 bytes
+Write bandwidth          : 384 bytes
+Total bandwidth          : 1104 bytes
+
+--- Throughput ---
+Throughput               : 1.70678 req/sec
+Goodput                  : 1.02407 authorized req/sec
+========================================
+P0 : sent=553 bytes, recv=552 bytes, total=1105 bytes
+
+--- P1 OUTPUT ---
+target_val = 0
+[P1] dummy = 1
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+nodes_in_interval = 262144
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+
+========== Experiment Summary ==========
+Total requests           : 10
+Authorized requests      : 6
+Cover requests           : 4
+Authorized fraction      : 0.6
+
+--- Latency ---
+Average eval latency     : 552.8 ms
+Average audit latency    : 4 ms
+Average write latency    : 27.7 ms
+
+--- Bandwidth ---
+Eval bandwidth           : 720 bytes
+Audit bandwidth          : 0 bytes
+Write bandwidth          : 384 bytes
+Total bandwidth          : 1104 bytes
+
+--- Throughput ---
+Throughput               : 1.70678 req/sec
+Goodput                  : 1.02407 authorized req/sec
+========================================
+P0 : sent=552 bytes, recv=553 bytes, total=1105 bytes
+
+
+======================================
+RUN 3 / 5
+======================================
+--- P0 OUTPUT ---
+target_val = -998129048802565352
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Finalize
+
+========== Experiment Summary ==========
+Total requests           : 10
+Authorized requests      : 6
+Cover requests           : 4
+Authorized fraction      : 0.6
+
+--- Latency ---
+Average eval latency     : 552.8 ms
+Average audit latency    : 4 ms
+Average write latency    : 27.7 ms
+
+--- Bandwidth ---
+Eval bandwidth           : 720 bytes
+Audit bandwidth          : 0 bytes
+Write bandwidth          : 384 bytes
+Total bandwidth          : 1104 bytes
+
+--- Throughput ---
+Throughput               : 1.70736 req/sec
+Goodput                  : 1.02442 authorized req/sec
+========================================
+P0 : sent=553 bytes, recv=552 bytes, total=1105 bytes
+
+--- P1 OUTPUT ---
+target_val = 0
+[P1] dummy = 1
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+
+========== Experiment Summary ==========
+Total requests           : 10
+Authorized requests      : 6
+Cover requests           : 4
+Authorized fraction      : 0.6
+
+--- Latency ---
+Average eval latency     : 552.7 ms
+Average audit latency    : 4 ms
+Average write latency    : 27.7 ms
+
+--- Bandwidth ---
+Eval bandwidth           : 720 bytes
+Audit bandwidth          : 0 bytes
+Write bandwidth          : 384 bytes
+Total bandwidth          : 1104 bytes
+
+--- Throughput ---
+Throughput               : 1.70736 req/sec
+Goodput                  : 1.02442 authorized req/sec
+========================================
+P0 : sent=552 bytes, recv=553 bytes, total=1105 bytes
+
+
+======================================
+RUN 4 / 5
+======================================
+--- P0 OUTPUT ---
+target_val = -3831949209458457554
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Finalize
+
+========== Experiment Summary ==========
+Total requests           : 10
+Authorized requests      : 6
+Cover requests           : 4
+Authorized fraction      : 0.6
+
+--- Latency ---
+Average eval latency     : 552.6 ms
+Average audit latency    : 4 ms
+Average write latency    : 27.6 ms
+
+--- Bandwidth ---
+Eval bandwidth           : 720 bytes
+Audit bandwidth          : 0 bytes
+Write bandwidth          : 384 bytes
+Total bandwidth          : 1104 bytes
+
+--- Throughput ---
+Throughput               : 1.70765 req/sec
+Goodput                  : 1.02459 authorized req/sec
+========================================
+P0 : sent=553 bytes, recv=552 bytes, total=1105 bytes
+
+--- P1 OUTPUT ---
+target_val = 0
+[P1] dummy = 1
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+
+========== Experiment Summary ==========
+Total requests           : 10
+Authorized requests      : 6
+Cover requests           : 4
+Authorized fraction      : 0.6
+
+--- Latency ---
+Average eval latency     : 552.7 ms
+Average audit latency    : 4 ms
+Average write latency    : 27.8 ms
+
+--- Bandwidth ---
+Eval bandwidth           : 720 bytes
+Audit bandwidth          : 0 bytes
+Write bandwidth          : 384 bytes
+Total bandwidth          : 1104 bytes
+
+--- Throughput ---
+Throughput               : 1.70736 req/sec
+Goodput                  : 1.02442 authorized req/sec
+========================================
+P0 : sent=552 bytes, recv=553 bytes, total=1105 bytes
+
+
+======================================
+RUN 5 / 5
+======================================
+--- P0 OUTPUT ---
+target_val = 7224483516976076693
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+nodes_in_interval = 262144
+Finalize
+
+========== Experiment Summary ==========
+Total requests           : 10
+Authorized requests      : 6
+Cover requests           : 4
+Authorized fraction      : 0.6
+
+--- Latency ---
+Average eval latency     : 552.5 ms
+Average audit latency    : 4 ms
+Average write latency    : 27.9 ms
+
+--- Bandwidth ---
+Eval bandwidth           : 720 bytes
+Audit bandwidth          : 0 bytes
+Write bandwidth          : 384 bytes
+Total bandwidth          : 1104 bytes
+
+--- Throughput ---
+Throughput               : 1.70678 req/sec
+Goodput                  : 1.02407 authorized req/sec
+========================================
+P0 : sent=553 bytes, recv=552 bytes, total=1105 bytes
+
+--- P1 OUTPUT ---
+target_val = 0
+[P1] dummy = 1
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 59
+nodes_in_interval = 262144
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+nodes_in_interval = 262144
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 60 ms
+Send Time: 0
+Recv Time: 60
+nodes_in_interval = 262144
+Finalize
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+Advice exchange: 59 ms
+Send Time: 0
+Recv Time: 59
+Advice exchange: 0 ms
+Send Time: 0
+Recv Time: 0
+nodes_in_interval = 262144
+Finalize
+
+========== Experiment Summary ==========
+Total requests           : 10
+Authorized requests      : 6
+Cover requests           : 4
+Authorized fraction      : 0.6
+
+--- Latency ---
+Average eval latency     : 552.7 ms
+Average audit latency    : 4 ms
+Average write latency    : 28 ms
+
+--- Bandwidth ---
+Eval bandwidth           : 720 bytes
+Audit bandwidth          : 0 bytes
+Write bandwidth          : 384 bytes
+Total bandwidth          : 1104 bytes
+
+--- Throughput ---
+Throughput               : 1.70678 req/sec
+Goodput                  : 1.02407 authorized req/sec
+========================================
+P0 : sent=552 bytes, recv=553 bytes, total=1105 bytes
+
+
