@@ -110,7 +110,7 @@ Example compilation flags:
 Compile the project using:
 
 ```bash
-make -j
+make remise
 ```
 
 ---
