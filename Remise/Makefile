@@ -59,7 +59,7 @@ $(TARGET): $(SRC) common.hpp shares.hpp mpcops.hpp dpf/dpf.h doram.hpp doram.tpp
 # ---------------------------------------------------------------------
 # MPC operations test
 # ---------------------------------------------------------------------
-$(TEST1): $(TEST1_SRC) shares.hpp mpcops.hpp types.hpp prg.hpp
+$(TEST1): $(TEST1_SRC) shares.hpp mpcops.hpp types.hpp 
 	$(CXX) $(CXXFLAGS) -DBOOST_ASIO_HAS_CO_AWAIT $(TEST1_SRC) -o $(TEST1) $(LIBS)
 
 # ---------------------------------------------------------------------

@@ -1,3 +1,0 @@
-run,authorized_fraction,total_requests,authorized_requests,cover_requests,avg_eval_ms,avg_audit_ms,avg_write_ms,throughput,goodput,eval_bandwidth,audit_bandwidth,write_bandwidth,total_bandwidth
-1,0.4,10,4,6,300,0,12,3.19795,1.27918,400,0,512,912
-2,0.4,10,4,6,300,0,12,3.19693,1.27877,400,0,512,912
