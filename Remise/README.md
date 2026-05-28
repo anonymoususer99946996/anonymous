@@ -269,6 +269,50 @@ The latency configuration script internally uses Linux traffic control (`tc`) to
 
 
 ---
+## Implementation Details
+
+### Simulating Multiple Parties in a Single Process
+
+For ease of benchmarking and reproducibility, all protocol parties are implemented within a single C++ program (`remiseBB.cpp`). Each party executes in its own thread and communicates through TCP sockets over localhost or across machines depending on the deployment configuration.
+
+Conceptually, the implementation follows the same communication structure as a distributed deployment:
+
+* each party maintains independent local state,
+* parties communicate only through explicit send/receive operations,
+* synchronization occurs only through protocol messages.
+
+This design significantly simplifies experimentation and benchmarking while preserving the logical structure of the distributed protocol.
+
+
+---
+
+### Stream-Based Communication API
+
+The networking interface overloads the C++ stream operators:
+
+* `<<` for sending data,
+* `>>` for receiving data.
+
+Example:
+
+```cpp
+peer << value;
+peer >> value;
+```
+
+This abstraction allows protocol code to closely resemble standard C++ stream semantics while hiding the low-level socket serialization logic.
+
+The overloaded operators internally handle:
+
+* serialization,
+* buffering,
+* transmission,
+* and deserialization of protocol data structures.
+
+This approach keeps the protocol implementation concise and improves readability of the MPC and communication code.
+
+---
+
 
 # License
 
