@@ -43,7 +43,7 @@ TEST5 = dpf_mpc
 TEST5_SRC = dpf_mpc_test.cpp
 
 TEST6 = remise
-TEST6_SRC = remiseBB.cpp
+TEST6_SRC = remise.cpp
 
 # ---------------------------------------------------------------------
 # Default rule
