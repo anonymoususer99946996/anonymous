@@ -132,8 +132,19 @@ awaitable<void> run_p0(boost::asio::io_context& io, bool preprocess, bool replay
     auto r_and = co_await reconstruct_remote(peer, co_await (x * y));
     std::cout << "r_and = " << r_and << std::endl;
     
+    auto start0 = std::chrono::high_resolution_clock::now();
     XShare<uint64_t> z0 = co_await (AShare<uint64_t>{0, &ctx} == 0);
+    auto end0 = std::chrono::high_resolution_clock::now();
+
+    auto start1 = std::chrono::high_resolution_clock::now();
     XShare<uint64_t> z1 = co_await (AShare<uint64_t>{375, &ctx} == 0);
+    auto end1 = std::chrono::high_resolution_clock::now();
+
+    auto t0 = std::chrono::duration_cast<std::chrono::microseconds>(end0 - start0).count();
+    auto t1 = std::chrono::duration_cast<std::chrono::microseconds>(end1 - start1).count();
+
+    std::cout << "EQZ(0)   : " << t0 << " us\n";
+    std::cout << "EQZ(375) : " << t1 << " us\n";
 
     auto rz0 = co_await reconstruct_remote(peer, z0);
     auto rz1 = co_await reconstruct_remote(peer, z1);
