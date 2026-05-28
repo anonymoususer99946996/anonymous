@@ -227,6 +227,8 @@ write_bandwidth      mean = 384.0000   stddev = 0.0000   95CI = ±0.0000
 total_bandwidth      mean = 1424.0000   stddev = 0.0000   95CI = ±0.0000
 ```
 
+The results of this run will be saved in the `results` folder.
+
 ---
 
 ## Metrics
