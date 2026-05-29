@@ -378,15 +378,9 @@ https://git-crysp.uwaterloo.ca/avadapal/duoram
 
 To reproduce Figure 6:
 
-1. Run the Remise experiments using:
+1. Obtain, build, and run the two-party DORAM implementation from the repository above using the corresponding parameters reported in the paper.
 
-```bash
-sh run-all.sh config.txt
-```
-
-2. Obtain, build, and run the two-party DORAM implementation from the repository above using the corresponding parameters reported in the paper.
-
-3. Compare the resulting throughput, latency, and bandwidth measurements against the Remise results.
+2. Compare the resulting throughput, latency, and bandwidth measurements against the Remise results.
 
 ---
 
