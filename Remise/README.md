@@ -339,7 +339,7 @@ sh run-all.sh config.txt
 
 The configuration file specifies the database size and other experimental parameters.
 
-### MPC-PRF Baseline
+### MPC-PRF
 
 Build the MPC-PRF implementation:
 
