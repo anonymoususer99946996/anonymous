@@ -327,7 +327,7 @@ The latency values used for each experiment are reported in the evaluation secti
 
 ## Figures 3, 4, and 5
 
-Figures 3, 4, and 5 compare Remise against the MPC-PRF baseline.
+Figures 3, 4, and 5 compare Remise against the PACL baselines.
 
 ### Remise
 
