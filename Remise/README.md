@@ -313,6 +313,97 @@ This approach keeps the protocol implementation concise and improves readability
 
 ---
 
+# Reproducing Figures
+
+All experiments should be executed after configuring the desired network latency:
+
+```bash
+sh set-latency.sh <latency>
+```
+
+The latency values used for each experiment are reported in the evaluation section of the paper.
+
+---
+
+## Figures 3, 4, and 5
+
+Figures 3, 4, and 5 compare Remise against the MPC-PRF baseline.
+
+### Remise
+
+Run the Remise benchmark suite:
+
+```bash
+sh run-all.sh config.txt
+```
+
+The configuration file specifies the database size and other experimental parameters.
+
+### MPC-PRF Baseline
+
+Build the MPC-PRF implementation:
+
+```bash
+cd mpc-prf
+make
+```
+
+Launch the two parties in separate terminals.
+
+**Terminal 1**
+
+```bash
+./p0
+```
+
+**Terminal 2**
+
+```bash
+./p1
+```
+
+The reported measurements can then be used to generate the corresponding MPC-PRF results appearing in Figures 3, 4, and 5.
+
+---
+
+## Figure 6
+
+Figure 6 compares Remise against a two-party DORAM implementation.
+
+The DORAM implementation used in our evaluation is available at:
+
+```text
+https://git-crysp.uwaterloo.ca/avadapal/duoram
+```
+
+To reproduce Figure 6:
+
+1. Run the Remise experiments using:
+
+```bash
+sh run-all.sh config.txt
+```
+
+2. Obtain, build, and run the two-party DORAM implementation from the repository above using the corresponding parameters reported in the paper.
+
+3. Compare the resulting throughput, latency, and bandwidth measurements against the Remise results.
+
+---
+
+## Output
+
+All benchmarking scripts report:
+
+* Throughput
+* Goodput
+* Evaluation latency
+* Audit latency
+* Write latency
+* Communication bandwidth
+* 95% confidence intervals
+
+These measurements are sufficient to reproduce the figures reported in the paper.
+
 
 # License
 
