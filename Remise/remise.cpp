@@ -70,6 +70,35 @@ void print_m128i_all(__m128i v, const char *label) {
     printf("\n");
 }
 
+
+template <typename Peer, typename node_t>
+awaitable<void> print_bulletin_board2(Role role, Peer &peer, node_t *output, size_t nitems) {
+    std::cout << "\n===== Bulletin Board ===== " << nitems << "\n";
+
+    for (size_t jj = 0; jj < nitems; ++jj) {
+        node_t other_share{};
+
+        if (role == Role::P0) {
+            co_await (peer << output[jj]);
+            co_await (peer >> other_share);
+        } else {
+            co_await (peer >> other_share);
+            co_await (peer << output[jj]);
+        }
+
+        node_t value = other_share ^ output[jj];
+
+        if (value[0] != 0 || value[1] != 0) {
+            std::cout << "  • BB[" << std::setw(6) << jj << "]"
+                      << " = (" << (value[0]) << ", " << (value[1]) << ")\n";
+        }
+    }
+
+    std::cout << "==========================\n";
+
+    co_return;
+}
+
 template <typename Peer, typename leaf_t>
 awaitable<void> print_bulletin_board(Role role, Peer &peer, leaf_t *output, size_t nitems) {
     std::cout << "\n===== Bulletin Board ===== " << nitems << "\n";
@@ -200,15 +229,21 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
     uint64_t total_eval_ms = 0;
     uint64_t total_audit_ms = 0;
     uint64_t total_write_ms = 0;
+    uint64_t total_online_ms = 0;
     uint64_t eval_bytes = 0;
     uint64_t audit_bytes = 0;
     uint64_t write_bytes = 0;
-
+    uint64_t total_finalize_ms = 0;
+    uint64_t total_dbupdate_ms = 0;
+    uint64_t total_comm_ms = 0;
     size_t authorized_count = 0;
     size_t cover_count = 0;
 
     auto run_online = [&](NetPeer &peer, MPCContext &mpc_ctx, auto &key,
                           uint8_t *mask_bits) -> awaitable<void> {
+
+
+                
         std::mt19937 rng(12345);
 
         std::bernoulli_distribution auth_dist(authorized_fraction);
@@ -241,12 +276,13 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
 
             node_t *final_nodes;
 
-            uint8_t *final_t;
+            uint8_t *final_flags;
 
             size_t nodes_in_interval;
 
             co_await __evalinterval_mpc(mpc_ctx, peer, key, 0, nitems - 1, output, t, mask_bits,
-                                        final_nodes, final_t, nodes_in_interval, 8);
+                                        final_nodes, final_flags, nodes_in_interval, 8);
+
 
             auto end_eval = std::chrono::high_resolution_clock::now();
 
@@ -261,6 +297,8 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
                 (eval_sent_after - eval_sent_before) + (eval_recv_after - eval_recv_before);
 
             total_eval_ms += eval_ms;
+
+            auto online_start = std::chrono::high_resolution_clock::now();
 
             // ============================================
             // Audit
@@ -296,23 +334,51 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
             // ============================================
 
             auto start_write = std::chrono::high_resolution_clock::now();
+            
 
             if (authorized) {
+                
+
+                std::cout << "iter = " << iter << std::endl;
+                
+                auto t1 = std::chrono::high_resolution_clock::now();
 
                 finalize(key.prgkey, key.finalizer, output, final_nodes, nodes_in_interval,
-                         final_t);
+                         final_flags);
 
                 FCW = output[0];
 
                 for (size_t j = 1; j < nodes_in_interval; ++j) {
                     FCW ^= output[j];
                 }
+                auto t2 = std::chrono::high_resolution_clock::now();
 
+                 total_finalize_ms +=
+                        std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
                 uint64_t write_sent_before = ctx.bytes_sent();
 
                 uint64_t write_recv_before = ctx.bytes_received();
 
-                co_await ((peer << (FCW ^ target_val)) && (peer >> target_val_recv));
+               auto comm_start = std::chrono::high_resolution_clock::now();
+
+               co_await ((peer << (FCW ^ target_val)) && (peer >> target_val_recv));
+
+               auto comm_end = std::chrono::high_resolution_clock::now();
+
+
+
+
+		auto total_ms =
+			std::chrono::duration_cast<std::chrono::milliseconds>(comm_end - comm_start).count();
+
+		std::cerr
+			<< "total (Finalize!) : " << total_ms << " ms\n";
+
+
+              total_comm_ms +=
+                 std::chrono::duration_cast<std::chrono::milliseconds>(
+                    comm_end - comm_start)
+                    .count();
 
                 uint64_t write_sent_after = ctx.bytes_sent();
 
@@ -323,17 +389,38 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
 
                 target_val_recv ^= (FCW ^ target_val);
 
+                auto t3 = std::chrono::high_resolution_clock::now();
+
                 for (size_t j = 0; j < nitems; ++j) {
                     DB[j] ^= output[j];
 
-                    if (t[j]) {
+                    if (t[j])
                         DB[j] ^= target_val_recv;
-                    }
                 }
+
+                auto t4 = std::chrono::high_resolution_clock::now();
+
+                total_dbupdate_ms +=
+                    std::chrono::duration_cast<std::chrono::milliseconds>(t4 - t3).count();             
+                
             }
 
-            auto end_write = std::chrono::high_resolution_clock::now();
+    
 
+            
+            auto online_end = std::chrono::high_resolution_clock::now();
+
+            auto online_ms =
+                std::chrono::duration_cast<std::chrono::milliseconds>(
+                    online_end - online_start)
+                    .count();
+
+            total_online_ms += online_ms;
+
+            auto end_write = std::chrono::high_resolution_clock::now();
+            
+            //co_await print_bulletin_board(role, peer, DB, nitems);
+            
             auto write_ms =
                 std::chrono::duration_cast<std::chrono::milliseconds>(end_write - start_write)
                     .count();
@@ -351,6 +438,15 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
         double throughput = double(num_requests) / total_runtime_sec;
 
         double goodput = double(authorized_count) / total_runtime_sec;
+
+        double online_runtime_sec =
+            double(total_online_ms) / 1000.0;
+
+        double online_throughput =
+            double(num_requests) / online_runtime_sec;
+
+        double online_goodput =
+            double(authorized_count) / online_runtime_sec;
 
         uint64_t total_bytes = eval_bytes + audit_bytes + write_bytes;
 
@@ -375,7 +471,15 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
 
         std::cout << "Average write latency    : " << double(total_write_ms) / double(num_requests)
                   << " ms\n";
+        
 
+        
+        std::cout << "Average write latency (for PACL)    : " << double((total_finalize_ms  + total_dbupdate_ms)) / double(num_requests)
+                  << " ms\n";
+
+        std::cout << "Average FCW exchange latency : "
+                << double(total_comm_ms) / num_requests 
+                << " ms\n";
         std::cout << "\n--- Bandwidth ---\n";
 
         std::cout << "Eval bandwidth           : " << eval_bytes << " bytes\n";
@@ -392,7 +496,24 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
 
         std::cout << "Goodput                  : " << goodput << " authorized req/sec\n";
 
+        std::cout << "\n--- Online Throughput ---\n";
+
+        std::cout << "Online throughput        : "
+                  << online_throughput
+                  << " req/sec\n";
+
+        std::cout << "Online goodput           : "
+                  << online_goodput
+                  << " authorized req/sec\n";
+
         std::cout << "========================================\n";
+
+                    std::ofstream ofs("online_compute.csv", std::ios::app);
+
+            ofs << log_nitems << ","
+                << authorized_fraction << ","
+                << num_requests << ","
+                << double((total_finalize_ms  + total_dbupdate_ms)) / double(num_requests) << "\n";
 
         delete[] output;
         delete[] t;

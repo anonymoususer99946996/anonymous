@@ -102,7 +102,39 @@ static inline void stretch_leaf(const prgkey_t & prgkey, const node_t & seed, st
 	dpf::PRG(prgkey, clear_lsb(seed), &s, nodes_per_leaf);
 } // dpf::stretch_leaf
 
+inline void PRG_xor_finalizer(
+    const AES_KEY &prgkey,
+    const __m128i seed,
+    void *outbuf,
+    const __m128i *finalizer,
+    const uint32_t len,
+    const uint32_t from)
+{
+    __m128i *outbuf128 = reinterpret_cast<__m128i *>(outbuf);
 
+    for (uint32_t i = 0; i < len; ++i)
+    {
+        outbuf128[i] =
+            _mm_xor_si128(seed, _mm_set_epi64x(0, from + i));
+    }
+
+    AES_ecb_encrypt_blks(outbuf128,
+                         static_cast<unsigned int>(len),
+                         &prgkey);
+
+    for (uint32_t i = 0; i < len; ++i)
+    {
+        __m128i ctr = _mm_set_epi64x(0, from + i);
+
+        __m128i tweak =
+            _mm_xor_si128(
+                seed,
+                _mm_xor_si128(ctr, finalizer[i]));
+
+        outbuf128[i] =
+            _mm_xor_si128(outbuf128[i], tweak);
+    }
+}
 
 template<typename leaf_t, typename node_t, typename prgkey_t>
 struct dpf_key final
@@ -363,16 +395,36 @@ inline void finalize(const prgkey_t & prgkey,
     auto output_ =
         reinterpret_cast<std::array<node_t, NODES_PER_LEAF> *>(output);
 
-    for (size_t i = 0; i < nnodes; ++i)
-    {
-        stretch_leaf(prgkey, s[i], output_[i]);
+    // for (size_t i = 0; i < nnodes; ++i)
+    // {
+    //     stretch_leaf(prgkey, s[i], output_[i]);
 
-        for (size_t j = 0; j < NODES_PER_LEAF; ++j)
-        {
-            output_[i][j] = xor_if(output_[i][j], finalizer[j], t[i]);
-        }
-    }
+    //     for (size_t j = 0; j < NODES_PER_LEAF; ++j)
+    //     {
+    //         output_[i][j] = xor_if(output_[i][j], finalizer[j], t[i]);
+    //     }
+    // }
 
+	
+	for (size_t i = 0; i < nnodes; ++i)
+	{
+
+		if (t[i])
+		{
+			PRG_xor_finalizer(
+				prgkey,
+				clear_lsb(s[i]),
+				output_[i].data(),
+				finalizer.data(),
+				NODES_PER_LEAF,
+				0);
+		}
+		else
+		{
+			stretch_leaf(prgkey, s[i], output_[i]);
+		}
+ 
+	}
     return;
 }
 
@@ -427,7 +479,7 @@ __evalinterval_mpc(
     uint8_t * _t,
     const uint8_t * idx_bits,
     node_t*& final_nodes,
-    uint8_t*& final_t,
+    uint8_t*& final_flags,
     size_t& final_nodes_in_interval,
     size_t _nbits
 )
@@ -457,8 +509,6 @@ __evalinterval_mpc(
 
 	for (size_t layer = 0; layer < depth; ++layer)
 	{
-		
-		
 		#ifdef DEBUG
 		auto & cw = dpfkey.cw[layer];
 		uint8_t cw_t[2] = { get_lsb(cw, 0b01), get_lsb(cw, 0b10) };
@@ -505,38 +555,42 @@ __evalinterval_mpc(
 				#endif
 			} 
 		}
-
+		
+	    uint8_t advice_L = get_lsb(L_children) ^ idx_bits[layer];
+        uint8_t advice_R = get_lsb(R_children) ^ idx_bits[layer];
  
-		#ifdef DEBUG	
+		//#ifdef DEBUG	
 		__m128i L_children_rec, R_children_rec;
 		uint8_t bit_rec;
-		#endif
+		//#endif
 
 		using clock = std::chrono::steady_clock;
        
-	   #ifdef DEBUG
-		auto t0 = clock::now();
+ 
+		
 			
 		struct Wire {
 			__m128i L_;
 			__m128i R_;
 			uint8_t bit_;
+			uint8_t advice_L_;
+			uint8_t advice_R_;
 		};
 
 		static_assert(std::is_trivially_copyable_v<Wire>);
 
-		Wire out{L_children, R_children, idx_bits[layer]};
+		Wire out{L_children, R_children, idx_bits[layer], advice_L, advice_R};
 		Wire in; 
-
+		auto t0 = clock::now();
 		co_await ((peer << out) && (peer >> in));
+		auto t1 = clock::now();
+		
 		L_children_rec = in.L_;
 		R_children_rec = in.R_;
 		bit_rec = in.bit_;
-		auto t1 = clock::now();
+	
 
- 
 
- 
 		auto total_ms =
 			std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
 
@@ -544,72 +598,31 @@ __evalinterval_mpc(
 			<< "total : " << total_ms << " ms\n";
 
  
-
-		//auto& [L_children_rec, R_children_rec, bit_rec] = in.data;
-
 		bit_rec ^= idx_bits[layer];
 
-		//std::cout << "bit_rec = " << (int) bit_rec << std::endl;
-
-
-
-		
 		L_children_rec ^= L_children;
 		R_children_rec ^= R_children;
 
 
 		if(bit_rec == 0) _cw = R_children_rec;
 		if(bit_rec == 1) _cw = L_children_rec;
-	#endif
-
-		uint8_t advice_L = get_lsb(L_children) ^ idx_bits[layer];
-        uint8_t advice_R = get_lsb(R_children) ^ idx_bits[layer];
+ 
+	
 		
-		
-		// ---- define the wire (once, near your code) ----
-		struct AdviceWire {
-			uint8_t advice_L_;
-			uint8_t advice_R_;
-		};
+ 
+		// struct AdviceWire {
+		// 	uint8_t advice_L_;
+		// 	uint8_t advice_R_;
+		// };
 
-		static_assert(std::is_trivially_copyable_v<AdviceWire>);
+		// static_assert(std::is_trivially_copyable_v<AdviceWire>);
 
 		// ---- usage ----
 		using clock = std::chrono::steady_clock;
 
-
-
-		// pack
-		AdviceWire out_advice{
-			advice_L,
-			advice_R
-		};
-
-		AdviceWire in_advice;
-
-		auto t0 = clock::now();
-		co_spawn(
-			co_await boost::asio::this_coro::executor,
-			peer << out_advice,
-			boost::asio::detached
-		);
-
-		auto t1 = clock::now();
-		// now wait only for receive
-		co_await (peer >> in_advice);
-		
-		auto t2 = clock::now();
-
-		auto ms =
-			std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t0).count();
-
-		std::cerr << "Advice exchange: " << ms << " ms\n";
-		std::cerr << "Send Time: " <<  std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count() << std::endl;
-		std::cerr << "Recv Time: " <<  std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count() << std::endl;
-
 		// safe to unpack
-		auto advice_L_rec = in_advice.advice_L_;
-		auto advice_R_rec = in_advice.advice_R_;
+		auto advice_L_rec = in.advice_L_;
+		auto advice_R_rec = in.advice_R_;
 
 
  
@@ -645,7 +658,7 @@ __evalinterval_mpc(
 
 	final_nodes = s[0];
 
-	final_t = t[0];
+	final_flags = t[0];
 
 	final_nodes_in_interval = nodes_in_interval;
 
