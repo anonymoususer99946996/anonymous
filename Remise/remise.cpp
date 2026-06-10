@@ -368,11 +368,11 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
 
 
 
-		auto total_ms =
-			std::chrono::duration_cast<std::chrono::milliseconds>(comm_end - comm_start).count();
+		// auto total_ms =
+		// 	std::chrono::duration_cast<std::chrono::milliseconds>(comm_end - comm_start).count();
 
-		std::cerr
-			<< "total (Finalize!) : " << total_ms << " ms\n";
+		// std::cerr
+		// 	<< "total (Finalize!) : " << total_ms << " ms\n";
 
 
               total_comm_ms +=
@@ -456,7 +456,7 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
 
         std::cout << "Authorized requests      : " << authorized_count << std::endl;
 
-        std::cout << "Cover requests           : " << cover_count << std::endl;
+        std::cout << "Unauthorized requests           : " << cover_count << std::endl;
 
         std::cout << "Authorized fraction      : "
                   << double(authorized_count) / double(num_requests) << std::endl;

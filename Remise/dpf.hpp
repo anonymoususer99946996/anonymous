@@ -564,11 +564,11 @@ __evalinterval_mpc(
 		uint8_t bit_rec;
 		//#endif
 
-		using clock = std::chrono::steady_clock;
+		//using clock = std::chrono::steady_clock;
        
  
 		
-			
+			 
 		struct Wire {
 			__m128i L_;
 			__m128i R_;
@@ -581,9 +581,9 @@ __evalinterval_mpc(
 
 		Wire out{L_children, R_children, idx_bits[layer], advice_L, advice_R};
 		Wire in; 
-		auto t0 = clock::now();
+		//auto t0 = clock::now();
 		co_await ((peer << out) && (peer >> in));
-		auto t1 = clock::now();
+		//auto t1 = clock::now();
 		
 		L_children_rec = in.L_;
 		R_children_rec = in.R_;
@@ -591,11 +591,11 @@ __evalinterval_mpc(
 	
 
 
-		auto total_ms =
-			std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
+		// auto total_ms =
+		// 	std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
 
-		std::cerr
-			<< "total : " << total_ms << " ms\n";
+		// std::cerr
+		// 	<< "total : " << total_ms << " ms\n"; 
 
  
 		bit_rec ^= idx_bits[layer];
@@ -617,8 +617,8 @@ __evalinterval_mpc(
 
 		// static_assert(std::is_trivially_copyable_v<AdviceWire>);
 
-		// ---- usage ----
-		using clock = std::chrono::steady_clock;
+ 
+		//using clock = std::chrono::steady_clock;
 
 		// safe to unpack
 		auto advice_L_rec = in.advice_L_;
