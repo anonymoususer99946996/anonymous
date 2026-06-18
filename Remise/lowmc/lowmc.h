@@ -1,0 +1,575 @@
+#ifndef LOWMC_LOWMC_H__
+#define LOWMC_LOWMC_H__
+
+#include <type_traits>          // std::conditional
+#include <cstring>              // std::memset
+#include <bitset>               // std::bitset
+#include <array>                // std::array
+#include <cstddef>              // std::size_t
+#include <thread>               // std::thread
+#include <future>               // std::async
+
+#include "../block.h"
+#include "randomness.h"
+#include "streams.h"
+//const size_t rounds = bitsliced_LowMC::num_rounds;
+std::array<block<__m256i> , 128> blinded_c1[29], own_blind[29]; // 128 --> replace to block_len
+namespace lowmc
+{
+
+/// the default block length in bytes (must be 128 or 256)
+constexpr size_t default_block_len = 128;
+
+/// the default number of rounds
+constexpr size_t default_rounds    = 144;
+
+/// the default number of s-boxes per round (must be between 1 and block_len/3)
+constexpr size_t default_sboxes    = 2;
+
+/// default number of slices in the bitsliced implementation
+constexpr size_t default_slices    = 128;
+
+/// mask used in the evaluation of s-boxes
+static const std::string sbox_mask = "01001001001001001001001001001001001001001"
+	"00100100100100100100100100100100100100100100100100100100100100100100100100"
+	"10010010010010010010010010010010010010010010010010010010010010010010010010"
+	"0100100100100100100100100100100100100100100100100100100100100100100";
+
+template <size_t block_len = default_block_len,
+          size_t rounds    = default_rounds,
+          size_t sboxes    = default_sboxes>
+class lowmc
+{
+  public:
+	// perform some basic sanity checks to ensure the template parameters
+	// are not horribly out of whack.
+	//
+	// N.B.: These asserts are *not* sufficient to ensure that the combination
+	//       of parameters yields a secure LowMC instantiation!!
+	static_assert(block_len == 128 || block_len == 256,
+		"block_len must be 128 or 256");
+	static_assert(rounds > 0,
+		"rounds must be positive");
+	static_assert(sboxes > 0,
+		"sboxes must be positive");
+	static_assert(sboxes < block_len/3,
+		"sboxes must be less than 3*block_len");
+	static_assert(rounds > 0,
+		"rounds must be positive");
+
+	/// number of bits in a block (Contraints: @ref block_size = 128 or @ref block_size = 256)
+	static constexpr auto block_size = block_len;
+
+	/// number of rounds (Constraints: 0 < @ref num_rounds)
+	static constexpr auto num_rounds = rounds;
+
+	/// number of s-boxes per round (Contraints: 0 < @ref sboxes_per_round ≤ @ref block_size/3)
+	static constexpr auto sboxes_per_round = sboxes;
+
+	/// number of bits per block unaffected by the s-boxes in each round
+	static constexpr auto identity_len = block_len - 3 * sboxes;
+
+	/// total number of s-boxes across all rounds
+	static constexpr auto sboxes_total = sboxes * rounds;
+
+	/// type representing a single lowmc block
+	using block_t = std::conditional_t<block_len == 128,
+		block<__m128i>, block<__m256i>>;
+
+	using instream = streams::input_stream<block_t>;
+	using outstream = streams::output_stream<block_t, 1>;
+	using rewindstream = streams::rewindable_stream<block_t, 1>;
+	using basicstream = streams::basic_stream<block_t, 1>;
+	using inputsocketstream = streams::input_socket_stream<block_t>;
+ 
+  //private:
+	/// mask for the highest-order bit in each s-box
+	block_t mask = sbox_mask;
+    block_t maska = mask;
+ //    block_t maska = block_t(std::string(sbox_mask, 0, identity_len  - 1));
+ 	
+	// /// mask for middle-order bit in each s-box
+	   block_t maskb = maska >> 1;
+	// /// mask for low-order bit in each s-box
+	   block_t maskc = maska >> 2;
+	// /// mask for the all-but-the-highest-order bit in each s-box
+	   block_t maskbc = maskb | maskc;
+
+	/// linear matrices -- these must be generated using gen_constants
+	static const uint64_t matrices[rounds][2 * block_len];
+	/// round constants -- these must be generated using gen_constants
+	static const block_t * round_constants;
+
+	static const uint64_t matrices2[rounds][2 * block_len / 4][16*2];
+
+ 
+
+}; // class lowmc
+
+template <size_t block_len = default_block_len,
+          size_t rounds    = default_rounds,
+          size_t sboxes    = default_sboxes,
+          size_t slices    = default_slices>
+class bitsliced_lowmc
+{
+  public:
+	static_assert(block_len == 128 || block_len == 256,
+		"block_len must be 128 or 256");
+	static_assert(sboxes > 0,
+		"sboxes must be positive");
+	static_assert(sboxes < 3*block_len,
+		"sboxes must be less than 3*block_len");
+	static_assert(rounds > 0,
+		"rounds must be positive");
+	static_assert(slices == 64 || slices == 128 || slices == 256,
+		"slices must be 64 or 128");
+
+	/// number of bits in a block
+	static constexpr auto block_size = block_len;
+
+	/// number of rounds
+	static constexpr auto num_rounds = rounds;
+
+	/// number of s-boxes per round
+	static constexpr auto sboxes_per_round = sboxes;
+
+	/// number of bits per block unaffected by the s-boxes in each round
+	static constexpr auto identity_len = block_len - 3 * sboxes;
+
+	/// total number of s-boxes across all rounds
+	static constexpr auto sboxes_total = num_rounds * sboxes_per_round;
+
+	/// type representing a single *non-bitsliced* lowmc block
+	using block_t = std::conditional_t<block_len == 128,
+		block<__m128i>, block<__m256i>>;
+
+	/// type representing a row of bits in bitsliced lowmc
+	//using slicerow_t = std::conditional_t<slices == 64, 
+	//	uint64_t, block<__m128i>>; // TODO: THIS NEEDS TO BE UNCOMMENTED AND FIXED
+
+	using slicerow_t = block<__m256i>;
+
+	/// type representing a bitsliced batch of lowmc ciphertext
+	using sliceblock_t = std::array<slicerow_t, block_len>; 
+	
+	/// type representing one bitsliced "s-box worth" of bits
+	using sboxslice_t = std::array<slicerow_t, 3>;
+
+	/// type representing non-identity part of a bitsliced block
+	using sboxslices_t = std::array<slicerow_t, 3*sboxes>;
+
+	using instream = streams::input_stream<sboxslices_t>;
+	using outstream = streams::output_stream<sboxslices_t>;
+	using rewindstream = streams::rewindable_stream<sboxslices_t>;
+	using basicstream = streams::basic_stream<sboxslices_t>;
+	using inputsocketstream = streams::input_socket_stream<block_t>;
+
+
+__m128i _mm_set1_epi8_xor(__m128i message, bool x)
+{
+  if(x) return message ^ _mm_set1_epi8(-1);
+  else  return message ^ _mm_set1_epi8(0);
+}
+ 
+
+	/// Plain-ol' ECB-mode encryption of a bitsliced batch of 1-block message
+	inline auto encrypt(const std::array<block<__m256i> , block_len> & msg) const
+	{
+		 auto c = msg;
+		 for (size_t i = 0; i < rounds; ++i)
+		 {
+		  c = substitute(c);
+		  c = mmul(matrices[i], c, round_constants[i]);
+		 }
+		return c;
+	} // encrypt
+
+ 
+template <class Stream>
+	inline auto encrypt2_p0p1( const std::array<block<__m256i> , block_len> & msg, 
+								   const std::array<block<__m256i>, 3 * sboxes> blind_recv[], const std::array<block<__m256i>, 3 * sboxes> gamma_recv[],							
+								   Stream & sb,  bool p
+								  ) const
+// inline auto encrypt2_p0p1( const std::array<block<__m256i> , block_len> & msg, 
+// 								   const std::array<block<__m256i>, 3 * sboxes> blind_recv[], const std::array<block<__m256i>, 3 * sboxes> gamma_recv[],							
+// 								   streams::socket_stream<block<__m256i>> & sb,  bool p
+// 								  ) const
+	{ 
+
+		std::cout << "encryptp2\n";
+		std::array<block<__m256i> , block_len> c0_ = msg;
+		
+		for (size_t i = 0; i < rounds; ++i)
+		{	
+			for(size_t j = 0; j < 3 * sboxes; ++j)
+			{
+				 own_blind[i][j] =  blind_recv[i][j] ^ c0_[j];
+
+			}
+			
+		  	sb << own_blind[i];  //< blind own share; send to other party	
+		 	sb >> blinded_c1[i];
+
+			c0_ = substitute2_p0p1(c0_, blind_recv[i], blinded_c1[i], gamma_recv[i]);
+			c0_ = mmul(matrices[i], c0_, p ? round_constants[i] : 0);	
+		  }
+
+		return c0_;
+	} // encrypt2_p0p1
+
+		inline auto & substitute2_p0p1(std::array<block<__m256i> , block_len> & share0,
+		 const std::array<block<__m256i> , 3 * sboxes> & blind0,  std::array<block<__m256i> , block_len> & blinded_share1,
+		 const std::array<block<__m256i> , 3 * sboxes> & gamma0) const
+	{
+		for (size_t i = 0, j = 0; i < sboxes; ++i, j+=3)
+		{
+			auto c = ((share0[j+2] ^ blinded_share1[j+2]) & share0[j+1])
+			    ^ (blind0[j+2] & blinded_share1[j+1]) ^ share0[j+1] ^ share0[j+2];
+			auto b = ((share0[j+0] ^ blinded_share1[j+0]) & share0[j+2])
+			    ^ (blind0[j+0] & blinded_share1[j+2]) ^ share0[j+2];
+			auto a = ((share0[j+1] ^ blinded_share1[j+1]) & share0[j+0])
+			    ^ (blind0[j+1] & blinded_share1[j+0]);
+
+			share0[j+0] ^= c ^ gamma0[j+0];
+			share0[j+1] ^= b ^ gamma0[j+1];
+			share0[j+2] ^= a ^ gamma0[j+2];
+		}
+		return share0;
+	} // substitute2_p0p1
+
+
+	inline auto mmul(const uint64_t * matrix1, const sliceblock_t & matrix2,
+		const block_t & constant) const
+	{
+		auto result = sliced_set(constant);
+
+		for (size_t i = 0; i < sizeof(slicerow_t)/16; ++i)
+		{
+			slicerow_t lut[8][256];
+			populate_lut(i, matrix2, lut);
+			for (size_t j = 0; j < block_len; ++j)
+			{
+				auto tmp = matrix1[i + sizeof(slicerow_t)/16*j];
+				for (size_t k = 0; k < sizeof(uint64_t); ++k)
+				{
+					result[j] ^= lut[k][tmp & 0xff];
+					tmp >>= 8;
+				}
+			}
+		}
+		return result;
+	} // mmul
+
+  //private:
+	static const uint64_t matrices[rounds][2 * block_len];
+	static const block_t * round_constants;
+
+	inline auto & substitute(sliceblock_t & msg) const
+	{
+		for (size_t i = 0, j = 0; i < sboxes; ++i, j+=3)
+		{
+			auto c = (msg[j+2] & msg[j+1]) ^ msg[j+1] ^ msg[j+2];
+			auto b = (msg[j+0] & msg[j+2]) ^ msg[j+2];
+			auto a = (msg[j+0] & msg[j+1]);
+
+			msg[j+0] ^= c;
+			msg[j+1] ^= b;
+			msg[j+2] ^= a;
+		}
+		return msg;
+	} // substitute
+
+ 
+
+ 
+
+	void populate_lut(const size_t i, const sliceblock_t & matrix,
+		slicerow_t lut[8][256]) const
+	{
+		for (size_t k = 0; k < sizeof(uint64_t); ++k)
+		{
+			//std::memset(&lut[k][0b00000000], 0, sizeof(slicerow_t));      //0x00
+			lut[k][0b00000001] = matrix[64*i+8*k+0];                      //0x01
+			lut[k][0b00000010] = matrix[64*i+8*k+1];                      //0x02
+			lut[k][0b00000011] = lut[k][0b00000010] ^ lut[k][0b00000001]; //0x03
+			lut[k][0b00000100] = matrix[64*i+8*k+2];                      //0x04
+			lut[k][0b00000101] = lut[k][0b00000100] ^ lut[k][0b00000001]; //0x05
+			lut[k][0b00000110] = lut[k][0b00000100] ^ lut[k][0b00000010]; //0x06
+			lut[k][0b00000111] = lut[k][0b00000100] ^ lut[k][0b00000011]; //0x07
+			lut[k][0b00001000] = matrix[64*i+8*k+3];                      //0x08
+			lut[k][0b00001001] = lut[k][0b00001000] ^ lut[k][0b00000001]; //0x09
+			lut[k][0b00001010] = lut[k][0b00001000] ^ lut[k][0b00000010]; //0x0a
+			lut[k][0b00001011] = lut[k][0b00001000] ^ lut[k][0b00000011]; //0x0b
+			lut[k][0b00001100] = lut[k][0b00001000] ^ lut[k][0b00000100]; //0x0c
+			lut[k][0b00001101] = lut[k][0b00001000] ^ lut[k][0b00000101]; //0x0d
+			lut[k][0b00001110] = lut[k][0b00001000] ^ lut[k][0b00000110]; //0x0e
+			lut[k][0b00001111] = lut[k][0b00001000] ^ lut[k][0b00000111]; //0x0f
+			lut[k][0b00010000] = matrix[64*i+8*k+4];                      //0x10
+			lut[k][0b00010001] = lut[k][0b00010000] ^ lut[k][0b00000001]; //0x11
+			lut[k][0b00010010] = lut[k][0b00010000] ^ lut[k][0b00000010]; //0x12
+			lut[k][0b00010011] = lut[k][0b00010000] ^ lut[k][0b00000011]; //0x13
+			lut[k][0b00010100] = lut[k][0b00010000] ^ lut[k][0b00000100]; //0x14
+			lut[k][0b00010101] = lut[k][0b00010000] ^ lut[k][0b00000101]; //0x15
+			lut[k][0b00010110] = lut[k][0b00010000] ^ lut[k][0b00000110]; //0x16
+			lut[k][0b00010111] = lut[k][0b00010000] ^ lut[k][0b00000111]; //0x17
+			lut[k][0b00011000] = lut[k][0b00010000] ^ lut[k][0b00001000]; //0x18
+			lut[k][0b00011001] = lut[k][0b00010000] ^ lut[k][0b00001001]; //0x19
+			lut[k][0b00011010] = lut[k][0b00010000] ^ lut[k][0b00001010]; //0x1a
+			lut[k][0b00011011] = lut[k][0b00010000] ^ lut[k][0b00001011]; //0x1b
+			lut[k][0b00011100] = lut[k][0b00010000] ^ lut[k][0b00001100]; //0x1c
+			lut[k][0b00011101] = lut[k][0b00010000] ^ lut[k][0b00001101]; //0x1d
+			lut[k][0b00011110] = lut[k][0b00010000] ^ lut[k][0b00001110]; //0x1e
+			lut[k][0b00011111] = lut[k][0b00010000] ^ lut[k][0b00001111]; //0x1f
+			lut[k][0b00100000] = matrix[64*i+8*k+5];                      //0x20
+			lut[k][0b00100001] = lut[k][0b00100000] ^ lut[k][0b00000001]; //0x21
+			lut[k][0b00100010] = lut[k][0b00100000] ^ lut[k][0b00000010]; //0x22
+			lut[k][0b00100011] = lut[k][0b00100000] ^ lut[k][0b00000011]; //0x23
+			lut[k][0b00100100] = lut[k][0b00100000] ^ lut[k][0b00000100]; //0x24
+			lut[k][0b00100101] = lut[k][0b00100000] ^ lut[k][0b00000101]; //0x25
+			lut[k][0b00100110] = lut[k][0b00100000] ^ lut[k][0b00000110]; //0x26
+			lut[k][0b00100111] = lut[k][0b00100000] ^ lut[k][0b00000111]; //0x27
+			lut[k][0b00101000] = lut[k][0b00100000] ^ lut[k][0b00001000]; //0x28
+			lut[k][0b00101001] = lut[k][0b00100000] ^ lut[k][0b00001001]; //0x29
+			lut[k][0b00101010] = lut[k][0b00100000] ^ lut[k][0b00001010]; //0x2a
+			lut[k][0b00101011] = lut[k][0b00100000] ^ lut[k][0b00001011]; //0x2b
+			lut[k][0b00101100] = lut[k][0b00100000] ^ lut[k][0b00001100]; //0x2c
+			lut[k][0b00101101] = lut[k][0b00100000] ^ lut[k][0b00001101]; //0x2d
+			lut[k][0b00101110] = lut[k][0b00100000] ^ lut[k][0b00001110]; //0x2e
+			lut[k][0b00101111] = lut[k][0b00100000] ^ lut[k][0b00001111]; //0x2f
+			lut[k][0b00110000] = lut[k][0b00100000] ^ lut[k][0b00010000]; //0x30
+			lut[k][0b00110001] = lut[k][0b00100000] ^ lut[k][0b00010001]; //0x31
+			lut[k][0b00110010] = lut[k][0b00100000] ^ lut[k][0b00010010]; //0x32
+			lut[k][0b00110011] = lut[k][0b00100000] ^ lut[k][0b00010011]; //0x33
+			lut[k][0b00110100] = lut[k][0b00100000] ^ lut[k][0b00010100]; //0x34
+			lut[k][0b00110101] = lut[k][0b00100000] ^ lut[k][0b00010101]; //0x35
+			lut[k][0b00110110] = lut[k][0b00100000] ^ lut[k][0b00010110]; //0x36
+			lut[k][0b00110111] = lut[k][0b00100000] ^ lut[k][0b00010111]; //0x37
+			lut[k][0b00111000] = lut[k][0b00100000] ^ lut[k][0b00011000]; //0x38
+			lut[k][0b00111001] = lut[k][0b00100000] ^ lut[k][0b00011001]; //0x39
+			lut[k][0b00111010] = lut[k][0b00100000] ^ lut[k][0b00011010]; //0x3a
+			lut[k][0b00111011] = lut[k][0b00100000] ^ lut[k][0b00011011]; //0x3b
+			lut[k][0b00111100] = lut[k][0b00100000] ^ lut[k][0b00011100]; //0x3c
+			lut[k][0b00111101] = lut[k][0b00100000] ^ lut[k][0b00011101]; //0x3d
+			lut[k][0b00111110] = lut[k][0b00100000] ^ lut[k][0b00011110]; //0x3e
+			lut[k][0b00111111] = lut[k][0b00100000] ^ lut[k][0b00011111]; //0x3f
+			lut[k][0b01000000] = matrix[64*i+8*k+6];                      //0x40
+			lut[k][0b01000001] = lut[k][0b01000000] ^ lut[k][0b00000001]; //0x41
+			lut[k][0b01000010] = lut[k][0b01000000] ^ lut[k][0b00000010]; //0x42
+			lut[k][0b01000011] = lut[k][0b01000000] ^ lut[k][0b00000011]; //0x43
+			lut[k][0b01000100] = lut[k][0b01000000] ^ lut[k][0b00000100]; //0x44
+			lut[k][0b01000101] = lut[k][0b01000000] ^ lut[k][0b00000101]; //0x45
+			lut[k][0b01000110] = lut[k][0b01000000] ^ lut[k][0b00000110]; //0x46
+			lut[k][0b01000111] = lut[k][0b01000000] ^ lut[k][0b00000111]; //0x47
+			lut[k][0b01001000] = lut[k][0b01000000] ^ lut[k][0b00001000]; //0x48
+			lut[k][0b01001001] = lut[k][0b01000000] ^ lut[k][0b00001001]; //0x49
+			lut[k][0b01001010] = lut[k][0b01000000] ^ lut[k][0b00001010]; //0x4a
+			lut[k][0b01001011] = lut[k][0b01000000] ^ lut[k][0b00001011]; //0x4b
+			lut[k][0b01001100] = lut[k][0b01000000] ^ lut[k][0b00001100]; //0x4c
+			lut[k][0b01001101] = lut[k][0b01000000] ^ lut[k][0b00001101]; //0x4d
+			lut[k][0b01001110] = lut[k][0b01000000] ^ lut[k][0b00001110]; //0x4e
+			lut[k][0b01001111] = lut[k][0b01000000] ^ lut[k][0b00001111]; //0x4f
+			lut[k][0b01010000] = lut[k][0b01000000] ^ lut[k][0b00010000]; //0x50
+			lut[k][0b01010001] = lut[k][0b01000000] ^ lut[k][0b00010001]; //0x51
+			lut[k][0b01010010] = lut[k][0b01000000] ^ lut[k][0b00010010]; //0x52
+			lut[k][0b01010011] = lut[k][0b01000000] ^ lut[k][0b00010011]; //0x53
+			lut[k][0b01010100] = lut[k][0b01000000] ^ lut[k][0b00010100]; //0x54
+			lut[k][0b01010101] = lut[k][0b01000000] ^ lut[k][0b00010101]; //0x55
+			lut[k][0b01010110] = lut[k][0b01000000] ^ lut[k][0b00010110]; //0x56
+			lut[k][0b01010111] = lut[k][0b01000000] ^ lut[k][0b00010111]; //0x57
+			lut[k][0b01011000] = lut[k][0b01000000] ^ lut[k][0b00011000]; //0x58
+			lut[k][0b01011001] = lut[k][0b01000000] ^ lut[k][0b00011001]; //0x59
+			lut[k][0b01011010] = lut[k][0b01000000] ^ lut[k][0b00011010]; //0x5a
+			lut[k][0b01011011] = lut[k][0b01000000] ^ lut[k][0b00011011]; //0x5b
+			lut[k][0b01011100] = lut[k][0b01000000] ^ lut[k][0b00011100]; //0x5c
+			lut[k][0b01011101] = lut[k][0b01000000] ^ lut[k][0b00011101]; //0x5d
+			lut[k][0b01011110] = lut[k][0b01000000] ^ lut[k][0b00011110]; //0x5e
+			lut[k][0b01011111] = lut[k][0b01000000] ^ lut[k][0b00011111]; //0x5f
+			lut[k][0b01100000] = lut[k][0b01000000] ^ lut[k][0b00100000]; //0x60
+			lut[k][0b01100001] = lut[k][0b01000000] ^ lut[k][0b00100001]; //0x61
+			lut[k][0b01100010] = lut[k][0b01000000] ^ lut[k][0b00100010]; //0x62
+			lut[k][0b01100011] = lut[k][0b01000000] ^ lut[k][0b00100011]; //0x63
+			lut[k][0b01100100] = lut[k][0b01000000] ^ lut[k][0b00100100]; //0x64
+			lut[k][0b01100101] = lut[k][0b01000000] ^ lut[k][0b00100101]; //0x65
+			lut[k][0b01100110] = lut[k][0b01000000] ^ lut[k][0b00100110]; //0x66
+			lut[k][0b01100111] = lut[k][0b01000000] ^ lut[k][0b00100111]; //0x67
+			lut[k][0b01101000] = lut[k][0b01000000] ^ lut[k][0b00101000]; //0x68
+			lut[k][0b01101001] = lut[k][0b01000000] ^ lut[k][0b00101001]; //0x69
+			lut[k][0b01101010] = lut[k][0b01000000] ^ lut[k][0b00101010]; //0x6a
+			lut[k][0b01101011] = lut[k][0b01000000] ^ lut[k][0b00101011]; //0x6b
+			lut[k][0b01101100] = lut[k][0b01000000] ^ lut[k][0b00101100]; //0x6c
+			lut[k][0b01101101] = lut[k][0b01000000] ^ lut[k][0b00101101]; //0x6d
+			lut[k][0b01101110] = lut[k][0b01000000] ^ lut[k][0b00101110]; //0x6e
+			lut[k][0b01101111] = lut[k][0b01000000] ^ lut[k][0b00101111]; //0x6f
+			lut[k][0b01110000] = lut[k][0b01000000] ^ lut[k][0b00110000]; //0x70
+			lut[k][0b01110001] = lut[k][0b01000000] ^ lut[k][0b00110001]; //0x71
+			lut[k][0b01110010] = lut[k][0b01000000] ^ lut[k][0b00110010]; //0x72
+			lut[k][0b01110011] = lut[k][0b01000000] ^ lut[k][0b00110011]; //0x73
+			lut[k][0b01110100] = lut[k][0b01000000] ^ lut[k][0b00110100]; //0x74
+			lut[k][0b01110101] = lut[k][0b01000000] ^ lut[k][0b00110101]; //0x75
+			lut[k][0b01110110] = lut[k][0b01000000] ^ lut[k][0b00110110]; //0x76
+			lut[k][0b01110111] = lut[k][0b01000000] ^ lut[k][0b00110111]; //0x77
+			lut[k][0b01111000] = lut[k][0b01000000] ^ lut[k][0b00111000]; //0x78
+			lut[k][0b01111001] = lut[k][0b01000000] ^ lut[k][0b00111001]; //0x79
+			lut[k][0b01111010] = lut[k][0b01000000] ^ lut[k][0b00111010]; //0x7a
+			lut[k][0b01111011] = lut[k][0b01000000] ^ lut[k][0b00111011]; //0x7b
+			lut[k][0b01111100] = lut[k][0b01000000] ^ lut[k][0b00111100]; //0x7c
+			lut[k][0b01111101] = lut[k][0b01000000] ^ lut[k][0b00111101]; //0x7d
+			lut[k][0b01111110] = lut[k][0b01000000] ^ lut[k][0b00111110]; //0x7e
+			lut[k][0b01111111] = lut[k][0b01000000] ^ lut[k][0b00111111]; //0x7f
+			lut[k][0b10000000] = matrix[64*i+8*k+7];                      //0x80
+			lut[k][0b10000001] = lut[k][0b10000000] ^ lut[k][0b00000001]; //0x81
+			lut[k][0b10000010] = lut[k][0b10000000] ^ lut[k][0b00000010]; //0x82
+			lut[k][0b10000011] = lut[k][0b10000000] ^ lut[k][0b00000011]; //0x83
+			lut[k][0b10000100] = lut[k][0b10000000] ^ lut[k][0b00000100]; //0x84
+			lut[k][0b10000101] = lut[k][0b10000000] ^ lut[k][0b00000101]; //0x85
+			lut[k][0b10000110] = lut[k][0b10000000] ^ lut[k][0b00000110]; //0x86
+			lut[k][0b10000111] = lut[k][0b10000000] ^ lut[k][0b00000111]; //0x87
+			lut[k][0b10001000] = lut[k][0b10000000] ^ lut[k][0b00001000]; //0x88
+			lut[k][0b10001001] = lut[k][0b10000000] ^ lut[k][0b00001001]; //0x89
+			lut[k][0b10001010] = lut[k][0b10000000] ^ lut[k][0b00001010]; //0x8a
+			lut[k][0b10001011] = lut[k][0b10000000] ^ lut[k][0b00001011]; //0x8b
+			lut[k][0b10001100] = lut[k][0b10000000] ^ lut[k][0b00001100]; //0x8c
+			lut[k][0b10001101] = lut[k][0b10000000] ^ lut[k][0b00001101]; //0x8d
+			lut[k][0b10001110] = lut[k][0b10000000] ^ lut[k][0b00001110]; //0x8e
+			lut[k][0b10001111] = lut[k][0b10000000] ^ lut[k][0b00001111]; //0x8f
+			lut[k][0b10010000] = lut[k][0b10000000] ^ lut[k][0b00010000]; //0x90
+			lut[k][0b10010001] = lut[k][0b10000000] ^ lut[k][0b00010001]; //0x91
+			lut[k][0b10010010] = lut[k][0b10000000] ^ lut[k][0b00010010]; //0x92
+			lut[k][0b10010011] = lut[k][0b10000000] ^ lut[k][0b00010011]; //0x93
+			lut[k][0b10010100] = lut[k][0b10000000] ^ lut[k][0b00010100]; //0x94
+			lut[k][0b10010101] = lut[k][0b10000000] ^ lut[k][0b00010101]; //0x95
+			lut[k][0b10010110] = lut[k][0b10000000] ^ lut[k][0b00010110]; //0x96
+			lut[k][0b10010111] = lut[k][0b10000000] ^ lut[k][0b00010111]; //0x97
+			lut[k][0b10011000] = lut[k][0b10000000] ^ lut[k][0b00011000]; //0x98
+			lut[k][0b10011001] = lut[k][0b10000000] ^ lut[k][0b00011001]; //0x99
+			lut[k][0b10011010] = lut[k][0b10000000] ^ lut[k][0b00011010]; //0x9a
+			lut[k][0b10011011] = lut[k][0b10000000] ^ lut[k][0b00011011]; //0x9b
+			lut[k][0b10011100] = lut[k][0b10000000] ^ lut[k][0b00011100]; //0x9c
+			lut[k][0b10011101] = lut[k][0b10000000] ^ lut[k][0b00011101]; //0x9d
+			lut[k][0b10011110] = lut[k][0b10000000] ^ lut[k][0b00011110]; //0x9e
+			lut[k][0b10011111] = lut[k][0b10000000] ^ lut[k][0b00011111]; //0x9f
+			lut[k][0b10100000] = lut[k][0b10000000] ^ lut[k][0b00100000]; //0xa0
+			lut[k][0b10100001] = lut[k][0b10000000] ^ lut[k][0b00100001]; //0xa1
+			lut[k][0b10100010] = lut[k][0b10000000] ^ lut[k][0b00100010]; //0xa2
+			lut[k][0b10100011] = lut[k][0b10000000] ^ lut[k][0b00100011]; //0xa3
+			lut[k][0b10100100] = lut[k][0b10000000] ^ lut[k][0b00100100]; //0xa4
+			lut[k][0b10100101] = lut[k][0b10000000] ^ lut[k][0b00100101]; //0xa5
+			lut[k][0b10100110] = lut[k][0b10000000] ^ lut[k][0b00100110]; //0xa6
+			lut[k][0b10100111] = lut[k][0b10000000] ^ lut[k][0b00100111]; //0xa7
+			lut[k][0b10101000] = lut[k][0b10000000] ^ lut[k][0b00101000]; //0xa8
+			lut[k][0b10101001] = lut[k][0b10000000] ^ lut[k][0b00101001]; //0xa9
+			lut[k][0b10101010] = lut[k][0b10000000] ^ lut[k][0b00101010]; //0xaa
+			lut[k][0b10101011] = lut[k][0b10000000] ^ lut[k][0b00101011]; //0xab
+			lut[k][0b10101100] = lut[k][0b10000000] ^ lut[k][0b00101100]; //0xac
+			lut[k][0b10101101] = lut[k][0b10000000] ^ lut[k][0b00101101]; //0xad
+			lut[k][0b10101110] = lut[k][0b10000000] ^ lut[k][0b00101110]; //0xae
+			lut[k][0b10101111] = lut[k][0b10000000] ^ lut[k][0b00101111]; //0xaf
+			lut[k][0b10110000] = lut[k][0b10000000] ^ lut[k][0b00110000]; //0xb0
+			lut[k][0b10110001] = lut[k][0b10000000] ^ lut[k][0b00110001]; //0xb1
+			lut[k][0b10110010] = lut[k][0b10000000] ^ lut[k][0b00110010]; //0xb2
+			lut[k][0b10110011] = lut[k][0b10000000] ^ lut[k][0b00110011]; //0xb3
+			lut[k][0b10110100] = lut[k][0b10000000] ^ lut[k][0b00110100]; //0xb4
+			lut[k][0b10110101] = lut[k][0b10000000] ^ lut[k][0b00110101]; //0xb5
+			lut[k][0b10110110] = lut[k][0b10000000] ^ lut[k][0b00110110]; //0xb6
+			lut[k][0b10110111] = lut[k][0b10000000] ^ lut[k][0b00110111]; //0xb7
+			lut[k][0b10111000] = lut[k][0b10000000] ^ lut[k][0b00111000]; //0xb8
+			lut[k][0b10111001] = lut[k][0b10000000] ^ lut[k][0b00111001]; //0xb9
+			lut[k][0b10111010] = lut[k][0b10000000] ^ lut[k][0b00111010]; //0xba
+			lut[k][0b10111011] = lut[k][0b10000000] ^ lut[k][0b00111011]; //0xbb
+			lut[k][0b10111100] = lut[k][0b10000000] ^ lut[k][0b00111100]; //0xbc
+			lut[k][0b10111101] = lut[k][0b10000000] ^ lut[k][0b00111101]; //0xbd
+			lut[k][0b10111110] = lut[k][0b10000000] ^ lut[k][0b00111110]; //0xbe
+			lut[k][0b10111111] = lut[k][0b10000000] ^ lut[k][0b00111111]; //0xbf
+			lut[k][0b11000000] = lut[k][0b10000000] ^ lut[k][0b01000000]; //0xc0
+			lut[k][0b11000001] = lut[k][0b10000000] ^ lut[k][0b01000001]; //0xc1
+			lut[k][0b11000010] = lut[k][0b10000000] ^ lut[k][0b01000010]; //0xc2
+			lut[k][0b11000011] = lut[k][0b10000000] ^ lut[k][0b01000011]; //0xc3
+			lut[k][0b11000100] = lut[k][0b10000000] ^ lut[k][0b01000100]; //0xc4
+			lut[k][0b11000101] = lut[k][0b10000000] ^ lut[k][0b01000101]; //0xc5
+			lut[k][0b11000110] = lut[k][0b10000000] ^ lut[k][0b01000110]; //0xc6
+			lut[k][0b11000111] = lut[k][0b10000000] ^ lut[k][0b01000111]; //0xc7
+			lut[k][0b11001000] = lut[k][0b10000000] ^ lut[k][0b01001000]; //0xc8
+			lut[k][0b11001001] = lut[k][0b10000000] ^ lut[k][0b01001001]; //0xc9
+			lut[k][0b11001010] = lut[k][0b10000000] ^ lut[k][0b01001010]; //0xca
+			lut[k][0b11001011] = lut[k][0b10000000] ^ lut[k][0b01001011]; //0xcb
+			lut[k][0b11001100] = lut[k][0b10000000] ^ lut[k][0b01001100]; //0xcc
+			lut[k][0b11001101] = lut[k][0b10000000] ^ lut[k][0b01001101]; //0xcd
+			lut[k][0b11001110] = lut[k][0b10000000] ^ lut[k][0b01001110]; //0xce
+			lut[k][0b11001111] = lut[k][0b10000000] ^ lut[k][0b01001111]; //0xcf
+			lut[k][0b11010000] = lut[k][0b10000000] ^ lut[k][0b01010000]; //0xd0
+			lut[k][0b11010001] = lut[k][0b10000000] ^ lut[k][0b01010001]; //0xd1
+			lut[k][0b11010010] = lut[k][0b10000000] ^ lut[k][0b01010010]; //0xd2
+			lut[k][0b11010011] = lut[k][0b10000000] ^ lut[k][0b01010011]; //0xd3
+			lut[k][0b11010100] = lut[k][0b10000000] ^ lut[k][0b01010100]; //0xd4
+			lut[k][0b11010101] = lut[k][0b10000000] ^ lut[k][0b01010101]; //0xd5
+			lut[k][0b11010110] = lut[k][0b10000000] ^ lut[k][0b01010110]; //0xd6
+			lut[k][0b11010111] = lut[k][0b10000000] ^ lut[k][0b01010111]; //0xd7
+			lut[k][0b11011000] = lut[k][0b10000000] ^ lut[k][0b01011000]; //0xd8
+			lut[k][0b11011001] = lut[k][0b10000000] ^ lut[k][0b01011001]; //0xd9
+			lut[k][0b11011010] = lut[k][0b10000000] ^ lut[k][0b01011010]; //0xda
+			lut[k][0b11011011] = lut[k][0b10000000] ^ lut[k][0b01011011]; //0xdb
+			lut[k][0b11011100] = lut[k][0b10000000] ^ lut[k][0b01011100]; //0xdc
+			lut[k][0b11011101] = lut[k][0b10000000] ^ lut[k][0b01011101]; //0xdd
+			lut[k][0b11011110] = lut[k][0b10000000] ^ lut[k][0b01011110]; //0xde
+			lut[k][0b11011111] = lut[k][0b10000000] ^ lut[k][0b01011111]; //0xdf
+			lut[k][0b11100000] = lut[k][0b10000000] ^ lut[k][0b01100000]; //0xe0
+			lut[k][0b11100001] = lut[k][0b10000000] ^ lut[k][0b01100001]; //0xe1
+			lut[k][0b11100010] = lut[k][0b10000000] ^ lut[k][0b01100010]; //0xe2
+			lut[k][0b11100011] = lut[k][0b10000000] ^ lut[k][0b01100011]; //0xe3
+			lut[k][0b11100100] = lut[k][0b10000000] ^ lut[k][0b01100100]; //0xe4
+			lut[k][0b11100101] = lut[k][0b10000000] ^ lut[k][0b01100101]; //0xe5
+			lut[k][0b11100110] = lut[k][0b10000000] ^ lut[k][0b01100110]; //0xe6
+			lut[k][0b11100111] = lut[k][0b10000000] ^ lut[k][0b01100111]; //0xe7
+			lut[k][0b11101000] = lut[k][0b10000000] ^ lut[k][0b01101000]; //0xe8
+			lut[k][0b11101001] = lut[k][0b10000000] ^ lut[k][0b01101001]; //0xe9
+			lut[k][0b11101010] = lut[k][0b10000000] ^ lut[k][0b01101010]; //0xea
+			lut[k][0b11101011] = lut[k][0b10000000] ^ lut[k][0b01101011]; //0xeb
+			lut[k][0b11101100] = lut[k][0b10000000] ^ lut[k][0b01101100]; //0xec
+			lut[k][0b11101101] = lut[k][0b10000000] ^ lut[k][0b01101101]; //0xed
+			lut[k][0b11101110] = lut[k][0b10000000] ^ lut[k][0b01101110]; //0xee
+			lut[k][0b11101111] = lut[k][0b10000000] ^ lut[k][0b01101111]; //0xef
+			lut[k][0b11110000] = lut[k][0b10000000] ^ lut[k][0b01110000]; //0xf0
+			lut[k][0b11110001] = lut[k][0b10000000] ^ lut[k][0b01110001]; //0xf1
+			lut[k][0b11110010] = lut[k][0b10000000] ^ lut[k][0b01110010]; //0xf2
+			lut[k][0b11110011] = lut[k][0b10000000] ^ lut[k][0b01110011]; //0xf3
+			lut[k][0b11110100] = lut[k][0b10000000] ^ lut[k][0b01110100]; //0xf4
+			lut[k][0b11110101] = lut[k][0b10000000] ^ lut[k][0b01110101]; //0xf5
+			lut[k][0b11110110] = lut[k][0b10000000] ^ lut[k][0b01110110]; //0xf6
+			lut[k][0b11110111] = lut[k][0b10000000] ^ lut[k][0b01110111]; //0xf7
+			lut[k][0b11111000] = lut[k][0b10000000] ^ lut[k][0b01111000]; //0xf8
+			lut[k][0b11111001] = lut[k][0b10000000] ^ lut[k][0b01111001]; //0xf9
+			lut[k][0b11111010] = lut[k][0b10000000] ^ lut[k][0b01111010]; //0xfa
+			lut[k][0b11111011] = lut[k][0b10000000] ^ lut[k][0b01111011]; //0xfb
+			lut[k][0b11111100] = lut[k][0b10000000] ^ lut[k][0b01111100]; //0xfc
+			lut[k][0b11111101] = lut[k][0b10000000] ^ lut[k][0b01111101]; //0xfd
+			lut[k][0b11111110] = lut[k][0b10000000] ^ lut[k][0b01111110]; //0xfe
+			lut[k][0b11111111] = lut[k][0b10000000] ^ lut[k][0b01111111]; //0xff
+		} // for
+	} // populate_lut
+
+	inline auto sliced_set(const block_t & y) const
+	{
+		sliceblock_t result;
+		for (size_t i = 0; i < block_len; ++i)
+		{
+			if constexpr(slices == 64) 
+			{
+			 	result[i] = y[i] ? -1 : 0;
+			}
+			else if constexpr(slices == 128) 
+			{
+			 	result[i] = y[i] ? _mm_set1_epi8(-1) : _mm_setzero_si128();
+			}
+			else  
+			{
+				result[i] = y[i] ? _mm256_set1_epi8(-1) : _mm256_setzero_si256();
+			}
+ 
+		}
+		return result;
+	} // sliced_set
+};
+
+} // namespace lowmc
+
+#endif // LOWMC_LOWMC_H__

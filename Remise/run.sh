@@ -34,19 +34,17 @@ ARGS="$LOG_NITEMS $LEAFSIZE $AUTH_FRACTION $NUM_REQUESTS $BATCH_SIZE"
 
 # Sanity: containers must be running.
 for c in p0 p1; do
-  state=$(docker inspect -f '{{.State.Running}}' "$c" 2>/dev/null || echo "missing")
+  state=$(docker inspect -f '{{.State.Running}}' "$c" 2>/dev/null || echo missing)
   if [[ "$state" != "true" ]]; then
     echo "ERROR: container '$c' is not running (state: $state). Run ./up.sh first." >&2
     exit 1
   fi
 done
 
+
 echo "==> Shaping network: RTT=${RTT}ms ${BW:+bw=$BW}"
 ./netshape.sh set "$RTT" ${BW:+"$BW"}
 
-# Optional: confirm the latency really took effect.
-echo "==> Ping check (P1 -> P0):"
-docker exec p1 ping -c 3 p0 || echo "(ping not available; skipping check)"
 
 echo "==> Launching experiment:  log_nitems=$LOG_NITEMS leafsize=$LEAFSIZE auth=$AUTH_FRACTION reqs=$NUM_REQUESTS"
 
