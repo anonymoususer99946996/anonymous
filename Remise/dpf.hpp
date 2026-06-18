@@ -24,10 +24,6 @@
 #define L 0
 #define R 1
   
- 
-
-
-
 namespace dpf
 {
 
@@ -390,21 +386,12 @@ inline void finalize(const prgkey_t & prgkey,
     using key_t = dpf_key<leaf_t, node_t, prgkey_t>;
     constexpr size_t NODES_PER_LEAF = key_t::nodes_per_leaf;
 
-     std::cout << "Finalize" << std::endl;
+    #ifdef VERBOSE
+	std::cout << "Finalize" << std::endl;
+	#endif
 
     auto output_ =
         reinterpret_cast<std::array<node_t, NODES_PER_LEAF> *>(output);
-
-    // for (size_t i = 0; i < nnodes; ++i)
-    // {
-    //     stretch_leaf(prgkey, s[i], output_[i]);
-
-    //     for (size_t j = 0; j < NODES_PER_LEAF; ++j)
-    //     {
-    //         output_[i][j] = xor_if(output_[i][j], finalizer[j], t[i]);
-    //     }
-    // }
-
 	
 	for (size_t i = 0; i < nnodes; ++i)
 	{
@@ -430,43 +417,6 @@ inline void finalize(const prgkey_t & prgkey,
 
 
 
-
- 
-
-template<typename leaf_t, typename node_t, typename prgkey_t>
-inline leaf_t eval(const dpf_key<leaf_t, node_t, prgkey_t> & dpfkey, const size_t input)
-{
-	auto prgkey = dpfkey.prgkey;
-	auto root = dpfkey.root;
-	auto depth = dpfkey.depth();
-	auto nbits = dpfkey.input_bits();
-
-	node_t S = root;
-	uint8_t T = get_lsb(root, 0b01);
-
-	for (size_t layer = 0; layer < depth; ++layer)
-	{
-		auto & cw = dpfkey.cw[layer];
-		const uint8_t nextbit = (input >> (nbits-layer-1)) & 1;
-		traverse_(prgkey, S, nextbit, get_lsb(cw, nextbit ? 0b10 : 0b01), cw, T, S, T); 
-	}
-
-	std::array<node_t, dpf_key<leaf_t, node_t, prgkey_t>::nodes_per_leaf> final;
-	finalize(prgkey, dpfkey.finalizer, &final, &S, 1, &T);
-
-	if constexpr(dpfkey.is_packed)
-	{
-		auto S_ = reinterpret_cast<node_t *>(&final);
-		return std::forward<leaf_t>(getword<leaf_t>(*S_, input % dpfkey.leaves_per_node));
-	}
-	else
-	{
-		auto ret = reinterpret_cast<leaf_t *>(&final);
-		return *ret;
-	}
-} // dpf::eval
-
-
 template<typename leaf_t, typename node_t, typename prgkey_t>
 boost::asio::awaitable<void>
 __evalinterval_mpc(
@@ -484,6 +434,11 @@ __evalinterval_mpc(
     size_t _nbits
 )
 {
+
+	#ifdef VERBOSE
+	std::cout << "\n\n__evalinterval_mpc\n\n";
+	#endif
+
 	auto nodes_per_leaf = dpfkey.nodes_per_leaf;
 	//std::cout << "nodes_per_leaf = " << nodes_per_leaf << std::endl;
 	auto depth = dpfkey.depth();
@@ -543,7 +498,6 @@ __evalinterval_mpc(
 		{
 			if (i < nodes_in_cur_layer - 1) 
 			{
-				//traverse2(prgkey, s[1-curlayer][j], cw_t, cw, t[1-curlayer][j], &s[curlayer][i], &t[curlayer][i]);
 				traverse_mpc(prgkey, s[1-curlayer][j], &s[curlayer][i], &t[curlayer][i]);
 				L_children ^= s[curlayer][i];
                 R_children ^= s[curlayer][i + 1];
@@ -565,10 +519,7 @@ __evalinterval_mpc(
 		//#endif
 
 		//using clock = std::chrono::steady_clock;
-       
- 
-		
-			 
+
 		struct Wire {
 			__m128i L_;
 			__m128i R_;
@@ -589,15 +540,6 @@ __evalinterval_mpc(
 		R_children_rec = in.R_;
 		bit_rec = in.bit_;
 	
-
-
-		// auto total_ms =
-		// 	std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
-
-		// std::cerr
-		// 	<< "total : " << total_ms << " ms\n"; 
-
- 
 		bit_rec ^= idx_bits[layer];
 
 		L_children_rec ^= L_children;
@@ -606,19 +548,26 @@ __evalinterval_mpc(
 
 		if(bit_rec == 0) _cw = R_children_rec;
 		if(bit_rec == 1) _cw = L_children_rec;
- 
-	
+
+		__m128i mask_share = _mm_set1_epi64x(-(int64_t)(idx_bits[layer] & 1));
 		
- 
-		// struct AdviceWire {
-		// 	uint8_t advice_L_;
-		// 	uint8_t advice_R_;
-		// };
+		__m128i mask_in;
+		co_await ((peer << mask_share) && (peer >> mask_in));
 
-		// static_assert(std::is_trivially_copyable_v<AdviceWire>);
+		mask_in ^= mask_share;
+
+		// mask = all-ones (128 bits) if bit_rec==1, else all-zero
+		__m128i mask = _mm_set1_epi64x(-(int64_t)(bit_rec & 1));
+
+		// bit_rec==1 -> L, bit_rec==0 -> R
+		__m128i _cw_test = R_children_rec ^ (mask_in & (R_children_rec ^ L_children_rec));
 
  
-		//using clock = std::chrono::steady_clock;
+
+		assert(_cw_test[0] ==  _cw[0]);
+		assert(_cw_test[1] ==  _cw[1]);
+		assert(mask[0] ==  mask_in[0]);
+		assert(mask[1] ==  mask_in[1]);
 
 		// safe to unpack
 		auto advice_L_rec = in.advice_L_;
@@ -729,8 +678,10 @@ inline void __evalinterval(const dpf_key<leaf_t, node_t, prgkey_t> & dpfkey, con
 		}
 	 }   
 
+	#ifdef VERBOSE
 	std::cout << "nodes_in_interval = " << nodes_in_interval << std::endl;
-
+	#endif
+	
 	finalize(prgkey, dpfkey.finalizer, output, s[0], nodes_in_interval, t[0]);
 
 } // dpf::__evalinterval
@@ -800,39 +751,6 @@ std::vector<uint8_t> serialize_dpf_key(const dpf_key<leaf_t, node_t, prgkey_t>& 
     serialize_bytes(buf, key.prgkey);
 
     return buf;
-
-    // std::vector<uint8_t> buf;
-
-    // // nitems
-    // serialize_bytes(buf, key.nitems);
-
-    // // root
-    // if constexpr (std::is_same_v<node_t, __m128i>)
-    //     serialize_m128i(buf, key.root);
-    // else
-    //     serialize_bytes(buf, key.root);
-
-    // // correction words
-    // uint64_t cw_size = key.cw.size();
-    // serialize_bytes(buf, cw_size);
-    // for (const auto& cw : key.cw) {
-    //     if constexpr (std::is_same_v<node_t, __m128i>)
-    //         serialize_m128i(buf, cw);
-    //     else
-    //         serialize_bytes(buf, cw);
-    // }
-
-    // // finalizer (array<node_t, N>)
-    // for (const auto& f : key.finalizer) {
-    //     if constexpr (std::is_same_v<node_t, __m128i>)
-    //         serialize_m128i(buf, f);
-    //     else
-    //         serialize_bytes(buf, f);
-    // }
-
-    // // prgkey
-    // serialize_bytes(buf, key.prgkey);
-    // return buf;
 }
 
 // --- Deserialize DPF key ---
@@ -869,40 +787,6 @@ dpf_key<leaf_t, node_t, prgkey_t> deserialize_dpf_key(const uint8_t* data, size_
 
     return dpf_key<leaf_t, __m128i, prgkey_t>(
         nitems, root, std::move(cw), finalizer, FCW, prgkey);
-		
-    // nitems
-    // uint64_t nitems = deserialize_bytes<uint64_t>(ptr);
-
-    // // root
-    // node_t root;
-    // if constexpr (std::is_same_v<node_t, __m128i>)
-    //     root = deserialize_m128i(ptr);
-    // else
-    //     root = deserialize_bytes<node_t>(ptr);
-
-    // // correction words
-    // uint64_t cw_size = deserialize_bytes<uint64_t>(ptr);
-    // std::vector<node_t> cw(cw_size);
-    // for (size_t i = 0; i < cw_size; ++i) {
-    //     if constexpr (std::is_same_v<node_t, __m128i>)
-    //         cw[i] = deserialize_m128i(ptr);
-    //     else
-    //         cw[i] = deserialize_bytes<node_t>(ptr);
-    // }
-
-    // // finalizer
-    // typename dpf_key<leaf_t, node_t, prgkey_t>::finalizer_t finalizer;
-    // for (auto& f : finalizer) {
-    //     if constexpr (std::is_same_v<node_t, __m128i>)
-    //         f = deserialize_m128i(ptr);
-    //     else
-    //         f = deserialize_bytes<node_t>(ptr);
-    // }
-
-    // // prgkey
-    // prgkey_t prgkey = deserialize_bytes<prgkey_t>(ptr);
-
-    // return dpf_key<leaf_t, node_t, prgkey_t>(nitems, root, cw, finalizer, prgkey);
 }
 
 

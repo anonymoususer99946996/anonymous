@@ -25,11 +25,14 @@ MPCOPS_SRC  = mpcops_test.cpp
 REMISE      = remise
 REMISE_SRC  = remise.cpp
 
+REMISE_SABRE     = remise_sabre
+REMISE_SABRE_SRC = remise_sabre.cpp
+
 # ---------------------------------------------------------------------
 # Default rule
 # ---------------------------------------------------------------------
 
-all: $(MPCOPS_TEST) $(REMISE)
+all: $(MPCOPS_TEST) $(REMISE) $(REMISE_SABRE)
 
 # ---------------------------------------------------------------------
 # MPC Operations Test
@@ -46,6 +49,13 @@ $(REMISE): $(REMISE_SRC) dpf.hpp types.hpp network.hpp
 	$(CXX) $(CXXFLAGS) $(REMISE_SRC) -o $(REMISE) $(LIBS)
 
 # ---------------------------------------------------------------------
+# Remise Sabre
+# ---------------------------------------------------------------------
+
+$(REMISE_SABRE): $(REMISE_SABRE_SRC) dpf.hpp types.hpp network.hpp
+	$(CXX) $(CXXFLAGS) $(REMISE_SABRE_SRC) -o $(REMISE_SABRE) $(LIBS)
+
+# ---------------------------------------------------------------------
 # Run helpers
 # ---------------------------------------------------------------------
 
@@ -55,9 +65,12 @@ run-mpcops: $(MPCOPS_TEST)
 run-remise: $(REMISE)
 	./$(REMISE)
 
+run-remise-sabre: $(REMISE_SABRE)
+	./$(REMISE_SABRE)
+
 # ---------------------------------------------------------------------
 # Clean
 # ---------------------------------------------------------------------
 
 clean:
-	rm -f $(MPCOPS_TEST) $(REMISE)
+	rm -f $(MPCOPS_TEST) $(REMISE) $(REMISE_SABRE)

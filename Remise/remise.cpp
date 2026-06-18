@@ -1,4 +1,4 @@
-#include <assert.h>
+ #include <assert.h>
 #include <bsd/stdlib.h>
 #include <iostream>
 
@@ -9,16 +9,29 @@
 #include <array>
 #include <chrono>
 #include <cstring>
+#include <fstream>
 #include <future>
+#include <iomanip>
+#include <memory>
+#include <random>
 #include <tuple>
 #include <utility>
+#include <vector>
 
 #include <inttypes.h>
 #include <stdint.h>
 #include <stdio.h>
 
-#include "dpf.hpp" 
-#include "types.hpp" 
+// ---- Boost.Asio parallelism primitives for running lanes concurrently ----
+#include <boost/asio/co_spawn.hpp>
+#include <boost/asio/deferred.hpp>
+#include <boost/asio/this_coro.hpp>
+#include <boost/asio/use_awaitable.hpp>
+#include <boost/asio/experimental/awaitable_operators.hpp>
+#include <boost/asio/experimental/parallel_group.hpp>
+
+#include "dpf.hpp"
+#include "types.hpp"
 
 
 #include <array>
@@ -90,7 +103,7 @@ awaitable<void> print_bulletin_board2(Role role, Peer &peer, node_t *output, siz
 
         if (value[0] != 0 || value[1] != 0) {
             std::cout << "  • BB[" << std::setw(6) << jj << "]"
-                      << " = (" << (value[0]) << ", " << (value[1]) << ")\n";
+                      << " = (" << std::hex << (value[0]) << ", " << (value[1]) << ")\n";
         }
     }
 
@@ -118,7 +131,7 @@ awaitable<void> print_bulletin_board(Role role, Peer &peer, leaf_t *output, size
 
         if (value[0][0] != 0 || value[1][0] != 0) {
             std::cout << "  • BB[" << std::setw(6) << jj << "]"
-                      << " = (" << (value[0][0]) << ", " << (value[1][0]) << ")\n";
+                      << " = (" << (value[0][0]) << ", " << (value[0][1]) << ")\n";
         }
     }
 
@@ -127,77 +140,133 @@ awaitable<void> print_bulletin_board(Role role, Peer &peer, leaf_t *output, size
     co_return;
 }
 
+// -----------------------------------------------------------------------------
+// Accept / connect N sockets on a single port so each parallel lane gets its
+// own TCP connection. A shared NetPeer cannot carry concurrent lanes because
+// overlapping async_write / async_read on one socket is undefined in Asio.
+// -----------------------------------------------------------------------------
+inline awaitable<std::vector<tcp::socket>>
+accept_n(boost::asio::io_context &io, uint16_t port, size_t n) {
+    tcp::acceptor acc(io, tcp::endpoint(tcp::v4(), port));
+
+    std::vector<tcp::socket> socks;
+    socks.reserve(n);
+
+    for (size_t i = 0; i < n; ++i) {
+        tcp::socket s(io);
+        co_await acc.async_accept(s, use_awaitable);
+        socks.push_back(std::move(s));
+    }
+
+    co_return socks;
+}
+
+inline awaitable<std::vector<tcp::socket>>
+connect_n(boost::asio::io_context &io, const std::string &host, uint16_t port, size_t n) {
+    std::vector<tcp::socket> socks;
+    socks.reserve(n);
+
+    // Sequential connects pair 1:1 with the server's sequential accepts.
+    for (size_t i = 0; i < n; ++i) {
+        auto s = co_await connect_with_retry(io, host, port);
+        socks.push_back(std::move(s));
+    }
+
+    co_return socks;
+}
+
 template <size_t LEAF_SIZE>
 awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Role role,
                                const size_t log_nitems, double authorized_fraction,
-                               size_t num_requests) {
+                               size_t num_requests, size_t batch_size) {
     using leaf_t = std::array<__m128i, LEAF_SIZE>;
+    using dpf_t = dpf_key<leaf_t, __m128i, AES_KEY>;
+    using node_t = __m128i;
 
-    // =====================================================
-    // Shared helpers
-    // =====================================================
+    if (batch_size == 0)
+        batch_size = 1;
 
     // =====================================================
     // Common setup
     // =====================================================
 
     const size_t nitems = 1ULL << log_nitems;
-    const size_t target_ind = 44;
 
-    leaf_t target_val;
-    leaf_t target_val_recv;
-
-    if (role == Role::P0) {
-        arc4random_buf(&target_val, sizeof(leaf_t));
-    }
-
-    std::cout << "target_val = " << target_val[0][0] << std::endl;
     leaf_t *DB = (leaf_t *)aligned_alloc(16, nitems * sizeof(leaf_t));
 
     __m128i *ProofDB = (__m128i *)aligned_alloc(16, nitems * sizeof(__m128i));
 
     arc4random_buf(ProofDB, nitems * sizeof(__m128i));
 
-    uint8_t *a = static_cast<uint8_t *>(malloc(log_nitems));
+    // =====================================================
+    // Per-lane OFFLINE material: one DISTINCT key per lane.
+    //
+    // Every per-lane input is derived from fixed seeds so P0 and P1 generate
+    // identical (k0_i, k1_i), identical mask-bit pairs (a_i, b_i) and identical
+    // target indices; each party then keeps only its own share. This mirrors
+    // the original single-key dealer-faking pattern, generalised to `batch_size`
+    // independent keys.
+    // =====================================================
 
-    uint8_t *b = static_cast<uint8_t *>(malloc(log_nitems));
+    std::vector<dpf_t> lane_keys;                            // role's key share, per lane
+    std::vector<std::vector<uint8_t>> lane_mask(batch_size); // role's path-bit share, per lane
+    std::vector<leaf_t> lane_target_val(batch_size);         // write payload share, per lane
 
-    if (!a || !b) {
-        throw std::bad_alloc();
+    lane_keys.reserve(batch_size);
+
+    AES_KEY prgkey; // single instance, reused exactly as in the original
+
+    std::mt19937_64 idx_gen(0xC0FFEEULL);
+    std::uniform_int_distribution<size_t> idx_dist(0, nitems - 1);
+
+    for (size_t i = 0; i < batch_size; ++i) {
+
+        const size_t ti = idx_dist(idx_gen); // distinct target index for this lane
+
+        leaf_t tval;
+        set_target_values(tval, 100, 300);
+
+        auto [kk0, kk1] = dpf_t::gen(prgkey, nitems, ti, tval);
+
+        // additive shares of the path bits of ti
+        std::vector<uint8_t> ai(log_nitems), bi(log_nitems);
+
+        std::mt19937_64 g(999ULL + i);
+        std::uniform_int_distribution<int> bd(0, 1);
+
+        for (size_t k = 0; k < log_nitems; ++k) {
+            const size_t bitpos = log_nitems - 1 - k;
+            const uint8_t bit = (ti >> bitpos) & 1;
+            ai[k] = static_cast<uint8_t>(bd(g));
+            bi[k] = ai[k] ^ bit;
+        }
+
+        // sanity: shares reconstruct the chosen index
+        {
+            size_t recon = 0;
+            for (size_t k = 0; k < log_nitems; ++k)
+                recon |= (size_t(ai[k] ^ bi[k]) << (log_nitems - 1 - k));
+            assert(recon == ti);
+            (void)recon;
+        }
+
+        // write payload: P0 randomises its share, P1 holds the zero share
+        leaf_t tv{};
+        if (role == Role::P0)
+            arc4random_buf(&tv, sizeof(leaf_t));
+        lane_target_val[i] = tv;
+
+        if (role == Role::P0) {
+            lane_keys.push_back(std::move(kk0));
+            lane_mask[i] = std::move(ai);
+        } else {
+            lane_keys.push_back(std::move(kk1));
+            lane_mask[i] = std::move(bi);
+        }
+
+        std::cout << "ti = " << ti << std::endl; 
+        std::cout << "tv = " << tv[0][0] << " , " << tv[0][1] << std::endl;
     }
-
-    std::mt19937_64 gen2(999);
-
-    std::uniform_int_distribution<int> bitdist(0, 1);
-
-    for (size_t i = 0; i < log_nitems; ++i) {
-
-        size_t bitpos = log_nitems - 1 - i;
-
-        uint8_t bit = (target_ind >> bitpos) & 1;
-
-        a[i] = bitdist(gen2);
-        b[i] = a[i] ^ bit;
-    }
-
-    size_t reconstructed = 0;
-
-    for (size_t i = 0; i < log_nitems; ++i) {
-
-        reconstructed |= (size_t(a[i] ^ b[i]) << (log_nitems - 1 - i));
-    }
-
-    assert(reconstructed == target_ind);
-
-    AES_KEY prgkey;
-
-    leaf_t target_value;
-    leaf_t FCW;
-
-    set_target_values(target_value, 100, 300);
-
-    auto [k0, k1] =
-        dpf_key<leaf_t, __m128i, AES_KEY>::gen(prgkey, nitems, target_ind, target_value);
 
     auto audit_tags = [](const uint8_t *t, const __m128i *ProofDB, size_t nitems) -> __m128i {
         __m128i acc0 = _mm_setzero_si128();
@@ -239,193 +308,245 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
     size_t authorized_count = 0;
     size_t cover_count = 0;
 
-    auto run_online = [&](NetPeer &peer, MPCContext &mpc_ctx, auto &key,
-                          uint8_t *mask_bits) -> awaitable<void> {
+    // -----------------------------------------------------------------
+    // Online phase. `lane_peers[i]` / `lane_ctx[i]` are lane i's private
+    // connection + MPC context. Within each batch the eval, audit and FCW
+    // exchanges all run concurrently across lanes; only the shared-DB XOR
+    // update is sequential.
+    // -----------------------------------------------------------------
+    auto run_online = [&](std::vector<NetPeer *> &lane_peers,
+                          std::vector<std::unique_ptr<MPCContext>> &lane_ctx) -> awaitable<void> {
 
-
-                
         std::mt19937 rng(12345);
-
         std::bernoulli_distribution auth_dist(authorized_fraction);
 
-        leaf_t *output = new leaf_t[nitems];
+        // Per-lane scratch, reused across batches.
+        std::vector<leaf_t *> output(batch_size);
+        std::vector<uint8_t *> t(batch_size);
+        std::vector<node_t *> final_nodes(batch_size, nullptr);
+        std::vector<uint8_t *> final_flags(batch_size, nullptr);
+        std::vector<size_t> nodes_in_interval(batch_size, 0);
+        std::vector<char> authorized(batch_size, 0);
+        std::vector<leaf_t> target_val_recv(batch_size); // reconstructed FCW^payload, per lane
 
-        uint8_t *t = new uint8_t[nitems];
+        for (size_t i = 0; i < batch_size; ++i) {
+            output[i] = new leaf_t[nitems];
+            t[i] = new uint8_t[nitems];
+        }
+
+        auto ex = co_await boost::asio::this_coro::executor;
+
+        // -------------------------------------------------------------
+        // Lane bodies. Each touches only lane i's buffers and socket.
+        // -------------------------------------------------------------
+
+        auto eval_lane = [&](size_t i) -> awaitable<void> {
+            co_await __evalinterval_mpc(*lane_ctx[i], *lane_peers[i], lane_keys[i], 0, nitems - 1,
+                                        output[i], t[i], lane_mask[i].data(), final_nodes[i],
+                                        final_flags[i], nodes_in_interval[i], 8);
+            co_return;
+        };
+
+        auto audit_lane = [&](size_t i) -> awaitable<void> {
+            NetPeer &peer = *lane_peers[i];
+
+            __m128i result = audit_tags(t[i], ProofDB, nitems);
+            asm volatile("" ::"x"(result));
+
+            __m128i recv;
+            co_await ((peer << result) && (peer >> recv));
+            result ^= recv;
+            asm volatile("" ::"x"(result));
+
+            co_return;
+        };
+
+        // finalize + FCW (local) then exchange FCW^payload (the overlapping comm).
+        // Reconstructed value is stashed in target_val_recv[i] for the DB update.
+        auto write_comm_lane = [&](size_t i, size_t global_iter) -> awaitable<void> {
+            NetPeer &peer = *lane_peers[i];
+            
+            #ifdef VERBOSE
+            std::cout << "iter = " << global_iter << std::endl;
+            #endif
+
+            auto f1 = std::chrono::high_resolution_clock::now();
+
+            finalize(lane_keys[i].prgkey, lane_keys[i].finalizer, output[i], final_nodes[i],
+                     nodes_in_interval[i], final_flags[i]);
+
+            leaf_t fcw = output[i][0];
+            for (size_t j = 1; j < nodes_in_interval[i]; ++j)
+                fcw ^= output[i][j];
+
+            auto f2 = std::chrono::high_resolution_clock::now();
+            total_finalize_ms +=
+                std::chrono::duration_cast<std::chrono::milliseconds>(f2 - f1).count();
+
+            leaf_t recv{};
+            co_await ((peer << (fcw ^ lane_target_val[i])) && (peer >> recv));
+            recv ^= (fcw ^ lane_target_val[i]);
+
+            target_val_recv[i] = recv;
+            co_return;
+        };
+
+        std::vector<size_t> auth_idx; // authorized lanes in the current batch
+        auth_idx.reserve(batch_size);
 
         auto experiment_start = std::chrono::high_resolution_clock::now();
 
-        for (size_t iter = 0; iter < num_requests; ++iter) {
-            bool authorized = auth_dist(rng);
+        for (size_t base = 0; base < num_requests; base += batch_size) {
 
-            if (authorized)
-                ++authorized_count;
-            else
-                ++cover_count;
+            const size_t lanes = std::min(batch_size, num_requests - base);
+
+            auth_idx.clear();
+            for (size_t i = 0; i < lanes; ++i) {
+                authorized[i] = auth_dist(rng) ? 1 : 0;
+                if (authorized[i]) {
+                    ++authorized_count;
+                    auth_idx.push_back(i);
+                } else {
+                    ++cover_count;
+                }
+            }
 
             // ============================================
-            // Eval
+            // (1) Eval  ->  `lanes` evalintervals in PARALLEL
             // ============================================
 
             uint64_t eval_sent_before = ctx.bytes_sent();
-
             uint64_t eval_recv_before = ctx.bytes_received();
 
             auto start_eval = std::chrono::high_resolution_clock::now();
 
-            using node_t = __m128i;
+            if (lanes == 1) {
+                co_await eval_lane(0);
+            } else {
+                using op_t =
+                    decltype(boost::asio::co_spawn(ex, eval_lane(0), boost::asio::deferred));
+                std::vector<op_t> ops;
+                ops.reserve(lanes);
+                for (size_t i = 0; i < lanes; ++i)
+                    ops.push_back(boost::asio::co_spawn(ex, eval_lane(i), boost::asio::deferred));
 
-            node_t *final_nodes;
-
-            uint8_t *final_flags;
-
-            size_t nodes_in_interval;
-
-            co_await __evalinterval_mpc(mpc_ctx, peer, key, 0, nitems - 1, output, t, mask_bits,
-                                        final_nodes, final_flags, nodes_in_interval, 8);
-
+                auto [order, exc] =
+                    co_await boost::asio::experimental::make_parallel_group(std::move(ops))
+                        .async_wait(boost::asio::experimental::wait_for_all(),
+                                    boost::asio::use_awaitable);
+                for (auto &e : exc)
+                    if (e)
+                        std::rethrow_exception(e);
+            }
 
             auto end_eval = std::chrono::high_resolution_clock::now();
-
-            auto eval_ms =
-                std::chrono::duration_cast<std::chrono::milliseconds>(end_eval - start_eval)
-                    .count();
-            uint64_t eval_sent_after = ctx.bytes_sent();
-
-            uint64_t eval_recv_after = ctx.bytes_received();
-
-            eval_bytes +=
-                (eval_sent_after - eval_sent_before) + (eval_recv_after - eval_recv_before);
-
-            total_eval_ms += eval_ms;
+            total_eval_ms +=
+                std::chrono::duration_cast<std::chrono::milliseconds>(end_eval - start_eval).count();
+            eval_bytes += (ctx.bytes_sent() - eval_sent_before) +
+                          (ctx.bytes_received() - eval_recv_before);
 
             auto online_start = std::chrono::high_resolution_clock::now();
 
             // ============================================
-            // Audit
+            // (2) Audit  ->  exchanges in PARALLEL across lanes
             // ============================================
 
             uint64_t audit_sent_before = ctx.bytes_sent();
-
             uint64_t audit_recv_before = ctx.bytes_received();
 
             auto start_audit = std::chrono::high_resolution_clock::now();
 
-            __m128i result = audit_tags(t, ProofDB, nitems);
+            if (lanes == 1) {
+                co_await audit_lane(0);
+            } else {
+                using op_t =
+                    decltype(boost::asio::co_spawn(ex, audit_lane(0), boost::asio::deferred));
+                std::vector<op_t> ops;
+                ops.reserve(lanes);
+                for (size_t i = 0; i < lanes; ++i)
+                    ops.push_back(boost::asio::co_spawn(ex, audit_lane(i), boost::asio::deferred));
 
-            asm volatile("" ::"x"(result));
-
-            auto end_audit = std::chrono::high_resolution_clock::now();
-
-            uint64_t audit_sent_after = ctx.bytes_sent();
-
-            uint64_t audit_recv_after = ctx.bytes_received();
-
-            audit_bytes +=
-                (audit_sent_after - audit_sent_before) + (audit_recv_after - audit_recv_before);
-
-            auto audit_ms =
-                std::chrono::duration_cast<std::chrono::milliseconds>(end_audit - start_audit)
-                    .count();
-
-            total_audit_ms += audit_ms;
-
-            // ============================================
-            // Write
-            // ============================================
-
-            auto start_write = std::chrono::high_resolution_clock::now();
-            
-
-            if (authorized) {
-                
-
-                std::cout << "iter = " << iter << std::endl;
-                
-                auto t1 = std::chrono::high_resolution_clock::now();
-
-                finalize(key.prgkey, key.finalizer, output, final_nodes, nodes_in_interval,
-                         final_flags);
-
-                FCW = output[0];
-
-                for (size_t j = 1; j < nodes_in_interval; ++j) {
-                    FCW ^= output[j];
-                }
-                auto t2 = std::chrono::high_resolution_clock::now();
-
-                 total_finalize_ms +=
-                        std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
-                uint64_t write_sent_before = ctx.bytes_sent();
-
-                uint64_t write_recv_before = ctx.bytes_received();
-
-               auto comm_start = std::chrono::high_resolution_clock::now();
-
-               co_await ((peer << (FCW ^ target_val)) && (peer >> target_val_recv));
-
-               auto comm_end = std::chrono::high_resolution_clock::now();
-
-
-
-
-		// auto total_ms =
-		// 	std::chrono::duration_cast<std::chrono::milliseconds>(comm_end - comm_start).count();
-
-		// std::cerr
-		// 	<< "total (Finalize!) : " << total_ms << " ms\n";
-
-
-              total_comm_ms +=
-                 std::chrono::duration_cast<std::chrono::milliseconds>(
-                    comm_end - comm_start)
-                    .count();
-
-                uint64_t write_sent_after = ctx.bytes_sent();
-
-                uint64_t write_recv_after = ctx.bytes_received();
-
-                write_bytes +=
-                    (write_sent_after - write_sent_before) + (write_recv_after - write_recv_before);
-
-                target_val_recv ^= (FCW ^ target_val);
-
-                auto t3 = std::chrono::high_resolution_clock::now();
-
-                for (size_t j = 0; j < nitems; ++j) {
-                    DB[j] ^= output[j];
-
-                    if (t[j])
-                        DB[j] ^= target_val_recv;
-                }
-
-                auto t4 = std::chrono::high_resolution_clock::now();
-
-                total_dbupdate_ms +=
-                    std::chrono::duration_cast<std::chrono::milliseconds>(t4 - t3).count();             
-                
+                auto [order, exc] =
+                    co_await boost::asio::experimental::make_parallel_group(std::move(ops))
+                        .async_wait(boost::asio::experimental::wait_for_all(),
+                                    boost::asio::use_awaitable);
+                for (auto &e : exc)
+                    if (e)
+                        std::rethrow_exception(e);
             }
 
-    
-
-            
-            auto online_end = std::chrono::high_resolution_clock::now();
-
-            auto online_ms =
-                std::chrono::duration_cast<std::chrono::milliseconds>(
-                    online_end - online_start)
+            auto end_audit = std::chrono::high_resolution_clock::now();
+            total_audit_ms +=
+                std::chrono::duration_cast<std::chrono::milliseconds>(end_audit - start_audit)
                     .count();
+            audit_bytes += (ctx.bytes_sent() - audit_sent_before) +
+                           (ctx.bytes_received() - audit_recv_before);
 
-            total_online_ms += online_ms;
+            // ============================================
+            // (3) Write
+            //     (3a) FCW exchanges in PARALLEL (authorized lanes)
+            //     (3b) shared-DB XOR update, SEQUENTIAL
+            // ============================================
+
+            uint64_t write_sent_before = ctx.bytes_sent();
+            uint64_t write_recv_before = ctx.bytes_received();
+
+            auto start_write = std::chrono::high_resolution_clock::now();
+
+            // (3a) parallel comm
+            auto comm_start = std::chrono::high_resolution_clock::now();
+
+            if (auth_idx.size() == 1) {
+                co_await write_comm_lane(auth_idx[0], base + auth_idx[0]);
+            } else if (auth_idx.size() > 1) {
+                using op_t = decltype(boost::asio::co_spawn(
+                    ex, write_comm_lane(size_t{0}, size_t{0}), boost::asio::deferred));
+                std::vector<op_t> ops;
+                ops.reserve(auth_idx.size());
+                for (size_t i : auth_idx)
+                    ops.push_back(boost::asio::co_spawn(ex, write_comm_lane(i, base + i),
+                                                        boost::asio::deferred));
+
+                auto [order, exc] =
+                    co_await boost::asio::experimental::make_parallel_group(std::move(ops))
+                        .async_wait(boost::asio::experimental::wait_for_all(),
+                                    boost::asio::use_awaitable);
+                for (auto &e : exc)
+                    if (e)
+                        std::rethrow_exception(e);
+            }
+
+            auto comm_end = std::chrono::high_resolution_clock::now();
+            total_comm_ms +=
+                std::chrono::duration_cast<std::chrono::milliseconds>(comm_end - comm_start).count();
+
+            // (3b) sequential DB update (shared DB; XOR is order-independent)
+            for (size_t i : auth_idx) {
+                auto d1 = std::chrono::high_resolution_clock::now();
+                for (size_t j = 0; j < nitems; ++j) {
+                    DB[j] ^= output[i][j];
+                    if (t[i][j])
+                        DB[j] ^= target_val_recv[i];
+                }
+                auto d2 = std::chrono::high_resolution_clock::now();
+                total_dbupdate_ms +=
+                    std::chrono::duration_cast<std::chrono::milliseconds>(d2 - d1).count();
+            }
 
             auto end_write = std::chrono::high_resolution_clock::now();
-            
-            //co_await print_bulletin_board(role, peer, DB, nitems);
-            
-            auto write_ms =
+            total_write_ms +=
                 std::chrono::duration_cast<std::chrono::milliseconds>(end_write - start_write)
                     .count();
+            write_bytes += (ctx.bytes_sent() - write_sent_before) +
+                           (ctx.bytes_received() - write_recv_before);
 
-            total_write_ms += write_ms;
+            auto online_end = std::chrono::high_resolution_clock::now();
+            total_online_ms +=
+                std::chrono::duration_cast<std::chrono::milliseconds>(online_end - online_start)
+                    .count();
+
+            // Debug reconstruction once per batch (was once per request before).
+            //co_await print_bulletin_board(role, *lane_peers[0], DB, nitems);
         }
 
         auto experiment_end = std::chrono::high_resolution_clock::now();
@@ -436,133 +557,130 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
             1000.0;
 
         double throughput = double(num_requests) / total_runtime_sec;
-
         double goodput = double(authorized_count) / total_runtime_sec;
 
-        double online_runtime_sec =
-            double(total_online_ms) / 1000.0;
-
-        double online_throughput =
-            double(num_requests) / online_runtime_sec;
-
-        double online_goodput =
-            double(authorized_count) / online_runtime_sec;
+        double online_runtime_sec = double(total_online_ms) / 1000.0;
+        double online_throughput = double(num_requests) / online_runtime_sec;
+        double online_goodput = double(authorized_count) / online_runtime_sec;
 
         uint64_t total_bytes = eval_bytes + audit_bytes + write_bytes;
 
         std::cout << "\n========== Experiment Summary ==========\n";
 
+        std::cout << "Batch size               : " << batch_size << std::endl;
         std::cout << "Total requests           : " << num_requests << std::endl;
-
         std::cout << "Authorized requests      : " << authorized_count << std::endl;
-
         std::cout << "Unauthorized requests           : " << cover_count << std::endl;
-
         std::cout << "Authorized fraction      : "
                   << double(authorized_count) / double(num_requests) << std::endl;
 
-        std::cout << "\n--- Latency ---\n";
+        std::cout << "\n--- Latency (amortized per request) ---\n";
 
         std::cout << "Average eval latency     : " << double(total_eval_ms) / double(num_requests)
                   << " ms\n";
-
         std::cout << "Average audit latency    : " << double(total_audit_ms) / double(num_requests)
                   << " ms\n";
-
-        std::cout << "Average write latency    : " << double(total_write_ms) / double(num_requests)
+        std::cout << "Average write latency    : "
+                  << double(total_write_ms) / double(authorized_count) << " ms\n";
+        std::cout << "Average write latency (for PACL)    : "
+                  << double((total_finalize_ms + total_dbupdate_ms)) / double(authorized_count)
                   << " ms\n";
-        
-
-        
-        std::cout << "Average write latency (for PACL)    : " << double((total_finalize_ms  + total_dbupdate_ms)) / double(num_requests)
-                  << " ms\n";
-
         std::cout << "Average FCW exchange latency : "
-                << double(total_comm_ms) / num_requests 
-                << " ms\n";
+                  << double(total_comm_ms) / double(authorized_count) << " ms\n";
+
         std::cout << "\n--- Bandwidth ---\n";
 
         std::cout << "Eval bandwidth           : " << eval_bytes << " bytes\n";
-
         std::cout << "Audit bandwidth          : " << audit_bytes << " bytes\n";
-
         std::cout << "Write bandwidth          : " << write_bytes << " bytes\n";
-
         std::cout << "Total bandwidth          : " << total_bytes << " bytes\n";
 
         std::cout << "\n--- Throughput ---\n";
 
         std::cout << "Throughput               : " << throughput << " req/sec\n";
-
         std::cout << "Goodput                  : " << goodput << " authorized req/sec\n";
 
         std::cout << "\n--- Online Throughput ---\n";
 
-        std::cout << "Online throughput        : "
-                  << online_throughput
-                  << " req/sec\n";
-
-        std::cout << "Online goodput           : "
-                  << online_goodput
-                  << " authorized req/sec\n";
-
+        std::cout << "Online throughput        : " << online_throughput << " req/sec\n";
+        std::cout << "Online goodput           : " << online_goodput << " authorized req/sec\n";
         std::cout << "========================================\n";
 
-                    std::ofstream ofs("online_compute.csv", std::ios::app);
+        std::ofstream ofs("online_compute.csv", std::ios::app);
+        // NOTE: trailing batch_size column appended to the original schema.
+        ofs << log_nitems << "," << authorized_fraction << "," << num_requests << ","
+            << double((total_finalize_ms + total_dbupdate_ms)) / double(authorized_count) << ","
+            << batch_size << "\n";
 
-            ofs << log_nitems << ","
-                << authorized_fraction << ","
-                << num_requests << ","
-                << double((total_finalize_ms  + total_dbupdate_ms)) / double(num_requests) << "\n";
-
-        delete[] output;
-        delete[] t;
+        for (size_t i = 0; i < batch_size; ++i) {
+            delete[] output[i];
+            delete[] t[i];
+        }
 
         co_return;
     };
 
     // =====================================================
-    // P0
+    // P0  (server): accept `batch_size` connections
     // =====================================================
 
     if (role == Role::P0) {
 
-        auto s_peer = co_await make_server(io, 9200);
+        auto socks = co_await accept_n(io, 9200, batch_size);
 
-        ctx.add_peer(Role::P0, std::move(s_peer));
+        for (size_t i = 0; i < batch_size; ++i)
+            ctx.add_peer(Role::P0, std::move(socks[i]));
 
-        NetPeer &peer = ctx.peer(Role::P0);
+        std::vector<NetPeer *> lane_peers;
+        std::vector<std::unique_ptr<MPCContext>> lane_ctx;
+        lane_peers.reserve(batch_size);
+        lane_ctx.reserve(batch_size);
 
-        MPCContext mpc_ctx(Role::P1, peer, &peer);
+        for (size_t i = 0; i < batch_size; ++i) {
+            NetPeer *p = ctx.peers[i].get();
+            lane_peers.push_back(p);
+            lane_ctx.push_back(std::make_unique<MPCContext>(Role::P1, *p, p));
+        }
 
-        // dummy sync
-        co_await peer.send(uint8_t{1});
+        // dummy sync barrier on lane 0
+        co_await lane_peers[0]->send(uint8_t{1});
 
-        co_await run_online(peer, mpc_ctx, k0, a);
+        co_await run_online(lane_peers, lane_ctx);
 
         co_return;
     }
 
     // =====================================================
-    // P1
+    // P1  (client): open `batch_size` connections
     // =====================================================
 
     if (role == Role::P1) {
 
-        auto s_peer = co_await connect_with_retry(io, "127.0.0.1", 9200);
+        const char *host = std::getenv("P0_HOST");
+        if (!host)
+            host = "p0";
 
-        ctx.add_peer(Role::P0, std::move(s_peer));
+        auto socks = co_await connect_n(io, host, 9200, batch_size);
 
-        NetPeer &peer = ctx.peer(Role::P0);
+        for (size_t i = 0; i < batch_size; ++i)
+            ctx.add_peer(Role::P0, std::move(socks[i]));
 
-        MPCContext mpc_ctx(Role::P1, peer, &peer);
+        std::vector<NetPeer *> lane_peers;
+        std::vector<std::unique_ptr<MPCContext>> lane_ctx;
+        lane_peers.reserve(batch_size);
+        lane_ctx.reserve(batch_size);
 
-        // dummy sync
-        auto dummy = co_await peer.recv<uint8_t>();
+        for (size_t i = 0; i < batch_size; ++i) {
+            NetPeer *p = ctx.peers[i].get();
+            lane_peers.push_back(p);
+            lane_ctx.push_back(std::make_unique<MPCContext>(Role::P1, *p, p));
+        }
 
+        // dummy sync barrier on lane 0
+        auto dummy = co_await lane_peers[0]->recv<uint8_t>();
         std::cout << "[P1] dummy = " << int(dummy) << std::endl;
 
-        co_await run_online(peer, mpc_ctx, k1, b);
+        co_await run_online(lane_peers, lane_ctx);
 
         co_return;
     }
@@ -570,45 +688,36 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
 
 awaitable<void> run_party(boost::asio::io_context &io, NetContext &ctx, Role role,
                           size_t log_nitems, size_t leaf_size, double authorized_fraction,
-                          size_t num_requests) {
+                          size_t num_requests, size_t batch_size) {
     switch (leaf_size) {
 
     case 2:
         co_return co_await run_party_impl<2>(io, ctx, role, log_nitems, authorized_fraction,
-                                             num_requests);
-
+                                             num_requests, batch_size);
     case 4:
         co_return co_await run_party_impl<4>(io, ctx, role, log_nitems, authorized_fraction,
-                                             num_requests);
-
+                                             num_requests, batch_size);
     case 8:
         co_return co_await run_party_impl<8>(io, ctx, role, log_nitems, authorized_fraction,
-                                             num_requests);
-
+                                             num_requests, batch_size);
     case 16:
         co_return co_await run_party_impl<16>(io, ctx, role, log_nitems, authorized_fraction,
-                                              num_requests);
-
+                                              num_requests, batch_size);
     case 64:
         co_return co_await run_party_impl<64>(io, ctx, role, log_nitems, authorized_fraction,
-                                              num_requests);
-
+                                              num_requests, batch_size);
     case 256:
         co_return co_await run_party_impl<256>(io, ctx, role, log_nitems, authorized_fraction,
-                                               num_requests);
-
+                                               num_requests, batch_size);
     case 1024:
         co_return co_await run_party_impl<1024>(io, ctx, role, log_nitems, authorized_fraction,
-                                                num_requests);
-
+                                                num_requests, batch_size);
     case 640:
         co_return co_await run_party_impl<640>(io, ctx, role, log_nitems, authorized_fraction,
-                                               num_requests);
-
+                                               num_requests, batch_size);
     case 2048:
         co_return co_await run_party_impl<2048>(io, ctx, role, log_nitems, authorized_fraction,
-                                                num_requests);
-
+                                                num_requests, batch_size);
     default:
         throw std::invalid_argument("Unsupported leaf_size");
     }
@@ -649,25 +758,12 @@ template <typename T> inline void print_scalar(const T &x) {
 // Master leaf printer: works for all required types
 // ============================================================================
 template <typename T> void print_leaf(const T &x) {
-    // ------------------------------------------------------------------------
-    // Case 1: __m128i
-    // ------------------------------------------------------------------------
     if constexpr (std::is_same_v<T, __m128i>) {
         print_m128i(x);
-    }
-
-    // ------------------------------------------------------------------------
-    // Case 2: scalar integrals uint8_t / uint32_t / uint64_t
-    // ------------------------------------------------------------------------
-    else if constexpr (std::is_integral_v<T>) {
+    } else if constexpr (std::is_integral_v<T>) {
         print_scalar(x);
-    }
-
-    // ------------------------------------------------------------------------
-    // Case 3: std::array<__m128i, K>
-    // ------------------------------------------------------------------------
-    else if constexpr (std::is_same_v<typename T::value_type, __m128i> &&
-                       std::is_array_v<T> == false && std::tuple_size<T>::value > 0) {
+    } else if constexpr (std::is_same_v<typename T::value_type, __m128i> &&
+                         std::is_array_v<T> == false && std::tuple_size<T>::value > 0) {
         printf("[ ");
         for (size_t i = 0; i < x.size(); i++) {
             print_m128i(x[i]);
@@ -675,13 +771,8 @@ template <typename T> void print_leaf(const T &x) {
                 printf(", ");
         }
         printf(" ]");
-    }
-
-    // ------------------------------------------------------------------------
-    // Case 4: std::array<U, K> for scalar U
-    // ------------------------------------------------------------------------
-    else if constexpr (std::tuple_size<T>::value > 0 &&
-                       std::is_integral_v<typename T::value_type>) {
+    } else if constexpr (std::tuple_size<T>::value > 0 &&
+                         std::is_integral_v<typename T::value_type>) {
         printf("[ ");
         for (size_t i = 0; i < x.size(); i++) {
             print_scalar(x[i]);
@@ -689,25 +780,22 @@ template <typename T> void print_leaf(const T &x) {
                 printf(", ");
         }
         printf(" ]");
-    }
-
-    // ------------------------------------------------------------------------
-    // Unsupported
-    // ------------------------------------------------------------------------
-    else {
+    } else {
         static_assert(sizeof(T) == 0, "print_leaf(): unsupported leaf type");
     }
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 6) {
+    if (argc != 6 && argc != 7) {
 
         std::cerr << "usage: ./remise "
                   << "[p0|p1] "
                   << "<log_num_items> "
                   << "<leafsize> "
                   << "<authorized_fraction> "
-                  << "<num_requests>\n";
+                  << "<num_requests> "
+                  << "[batch_size]\n"
+                  << "  batch_size defaults to 64; use 1 to disable batching.\n";
 
         return 1;
     }
@@ -719,18 +807,18 @@ int main(int argc, char *argv[]) {
     size_t log_nitems = 0;
     size_t leafsize = 0;
     size_t num_requests = 0;
+    size_t batch_size = 64; // default
 
     double authorized_fraction = 1.0;
 
     try {
 
         log_nitems = std::stoull(argv[2]);
-
         leafsize = std::stoull(argv[3]);
-
         authorized_fraction = std::stod(argv[4]);
-
         num_requests = std::stoull(argv[5]);
+        if (argc == 7)
+            batch_size = std::stoull(argv[6]);
 
     } catch (const std::exception &e) {
 
@@ -740,14 +828,16 @@ int main(int argc, char *argv[]) {
 
     if (authorized_fraction < 0.0 || authorized_fraction > 1.0) {
         std::cerr << "authorized_fraction must be in [0,1]\n";
-
         return 1;
     }
 
     if (num_requests == 0) {
-
         std::cerr << "num_requests must be > 0\n";
+        return 1;
+    }
 
+    if (batch_size == 0) {
+        std::cerr << "batch_size must be > 0\n";
         return 1;
     }
 
@@ -756,9 +846,7 @@ int main(int argc, char *argv[]) {
     } else if (r == "p1") {
         role = Role::P1;
     } else {
-
         std::cerr << "invalid role (use p0 or p1)\n";
-
         return 1;
     }
 
@@ -766,9 +854,10 @@ int main(int argc, char *argv[]) {
 
     NetContext ctx(role);
 
-    boost::asio::co_spawn(
-        io, run_party(io, ctx, role, log_nitems, leafsize, authorized_fraction, num_requests),
-        boost::asio::detached);
+    boost::asio::co_spawn(io,
+                          run_party(io, ctx, role, log_nitems, leafsize, authorized_fraction,
+                                    num_requests, batch_size),
+                          boost::asio::detached);
 
     io.run();
 
@@ -776,3 +865,5 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
+
+

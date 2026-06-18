@@ -40,14 +40,14 @@ struct CommStats {
         return bytes_sent + bytes_recv;
     }
 
-    void print(const std::string& prefix = "") const {
-        std::cout
-            << prefix
-            << "sent=" << bytes_sent
-            << " bytes, recv=" << bytes_recv
-            << " bytes, total=" << total()
-            << " bytes\n";
-    }
+    // void print(const std::string& prefix = "") const {
+    //     std::cout
+    //         << prefix
+    //         << "sent=" << bytes_sent
+    //         << " bytes, recv=" << bytes_recv
+    //         << " bytes, total=" << total()
+    //         << " bytes\n";
+    // }
 };
 
 // -----------------------------------------------------------------------------
@@ -481,7 +481,7 @@ struct NetContext {
                     break;
             }
 
-            p->stats.print(role_name + " : ");
+            //p->stats.print(role_name + " : ");
         }
     }
 };
