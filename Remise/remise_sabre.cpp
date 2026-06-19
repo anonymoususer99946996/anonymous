@@ -154,6 +154,7 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
     // [FIG3B] microsecond-resolution audit accumulator (ms truncates to 0 at
     // small DB sizes) + latency/trial labels supplied by run_remise_sabre.sh.
     uint64_t total_audit_us = 0;
+    uint64_t total_eval_us = 0;   // [MSGSWEEP] preprocess = eval (us precision)
     const char *rtt_env = std::getenv("REMISE_RTT_MS");
     const long fig3b_latency_ms = rtt_env ? std::strtol(rtt_env, nullptr, 10) : 0;
     const char *trial_env = std::getenv("REMISE_TRIAL");
@@ -210,8 +211,11 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
             auto start_write = std::chrono::high_resolution_clock::now();
 
             if (authorized) {
+                auto eval_t0 = std::chrono::high_resolution_clock::now();   // [MSGSWEEP] preprocess = eval
                 co_await __evalinterval_mpc(mpc_ctx, peer, key, 0, nitems - 1, output, t, mask_bits,
                                             final_nodes, final_flags, nodes_in_interval, 8);
+                auto eval_t1 = std::chrono::high_resolution_clock::now();
+                total_eval_us += std::chrono::duration_cast<std::chrono::microseconds>(eval_t1 - eval_t0).count();
 
                 // ===== ONLINE PHASE BEGINS (finalize) =====
                 auto online_start = std::chrono::high_resolution_clock::now();
@@ -341,6 +345,25 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
                << online_goodput << "\n";
         }
 
+        // [MSGSWEEP] message-size experiment: preprocess=eval, audit=audit,
+        //   access=finalize+FCW+DB-update. One row per trial.
+        //   schema: variant,latency_ms,leafsize,log_nitems,trial,preprocess_ms,audit_ms,access_ms
+        {
+            const double denom = double(num_requests);
+            const double preprocess_ms = double(total_eval_us) / 1000.0 / denom;
+            const double audit_ms      = double(total_audit_us) / 1000.0 / denom;
+            const double access_ms     = double(total_finalize_ms + total_comm_ms + total_dbupdate_ms) / authd;
+            std::ofstream fm("results/msgsweep_remisebb_sabre.csv", std::ios::app);
+            fm << "RemiseBB-Sabre" << ","
+               << fig3b_latency_ms << ","
+               << LEAF_SIZE << ","
+               << log_nitems << ","
+               << fig3b_trial << ","
+               << preprocess_ms << ","
+               << audit_ms << ","
+               << access_ms << "\n";
+        }
+
         delete[] output;
         delete[] t;
         co_return;
@@ -377,6 +400,7 @@ awaitable<void> run_party(boost::asio::io_context &io, NetContext &ctx, Role rol
     case 2:    co_return co_await run_party_impl<2>(io, ctx, role, log_nitems, authorized_fraction, num_requests);
     case 4:    co_return co_await run_party_impl<4>(io, ctx, role, log_nitems, authorized_fraction, num_requests);
     case 8:    co_return co_await run_party_impl<8>(io, ctx, role, log_nitems, authorized_fraction, num_requests);
+    case 10:   co_return co_await run_party_impl<10>(io, ctx, role, log_nitems, authorized_fraction, num_requests);
     case 16:   co_return co_await run_party_impl<16>(io, ctx, role, log_nitems, authorized_fraction, num_requests);
     case 64:   co_return co_await run_party_impl<64>(io, ctx, role, log_nitems, authorized_fraction, num_requests);
     case 256:  co_return co_await run_party_impl<256>(io, ctx, role, log_nitems, authorized_fraction, num_requests);

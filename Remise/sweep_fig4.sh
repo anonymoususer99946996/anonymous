@@ -14,7 +14,7 @@ cd "$(dirname "$0")"
 WHICH="${1:-both}"
 MAXK="${2:-26}"
 TRIALS="${3:-5}"
-REQS="${4:-200}"
+REQS="${4:-20}"
 LEAFSIZE=2          # 32-byte messages
 BW=100mbit
 L=30                # latency fixed at 30 ms (paper's Fig 4 setting); change if needed

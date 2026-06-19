@@ -660,6 +660,26 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
                << online_goodput << "\n";
         }
 
+        // [MSGSWEEP] message-size experiment: preprocess=eval, audit=audit,
+        //   access=finalize+FCW+DB-update. One row per trial.
+        //   schema: variant,latency_ms,leafsize,log_nitems,trial,preprocess_ms,audit_ms,access_ms
+        {
+            const double denom = double(num_requests);
+            const double preprocess_ms = double(total_eval_us) / 1000.0 / denom;
+            const double audit_ms      = double(total_audit_us) / 1000.0 / denom;
+            const double adenom = (authorized_count > 0) ? double(authorized_count) : 1.0;
+            const double access_ms = double(total_finalize_ms + total_comm_ms + total_dbupdate_ms) / adenom;
+            std::ofstream fm("results/msgsweep_remisebb.csv", std::ios::app);
+            fm << "RemiseBB" << ","
+               << fig3a_latency_ms << ","
+               << LEAF_SIZE << ","
+               << log_nitems << ","
+               << fig3a_trial << ","
+               << preprocess_ms << ","
+               << audit_ms << ","
+               << access_ms << "\n";
+        }
+
         for (size_t i = 0; i < batch_size; ++i) {
             delete[] output[i];
             delete[] t[i];
@@ -748,6 +768,9 @@ awaitable<void> run_party(boost::asio::io_context &io, NetContext &ctx, Role rol
     case 8:
         co_return co_await run_party_impl<8>(io, ctx, role, log_nitems, authorized_fraction,
                                              num_requests, batch_size);
+    case 10:
+        co_return co_await run_party_impl<10>(io, ctx, role, log_nitems, authorized_fraction,
+                                              num_requests, batch_size);
     case 16:
         co_return co_await run_party_impl<16>(io, ctx, role, log_nitems, authorized_fraction,
                                               num_requests, batch_size);
