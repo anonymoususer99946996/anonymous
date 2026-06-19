@@ -3,17 +3,12 @@
 #
 # Same role/arg convention as remise: [p0|p1] <log_nitems> <leafsize>
 # <auth_fraction> <num_requests>; P0 is the server on 9200, P1 connects via
-# P0_HOST. remise_sabre additionally performs the bitsliced-LowMC audit each
-# request. Containers must already be up (./up.sh).
+# P0_HOST. Forwards REMISE_RTT_MS (the RTT) and REMISE_TRIAL into the containers
+# so the binary can stamp latency_ms/trial into the Fig 3b / Fig 4b CSVs.
 #
 # Usage:
 #   ./run_remise_sabre.sh <RTT_ms> [bandwidth] [log_nitems] [leafsize] [auth_fraction] [num_requests]
 # Defaults: log_nitems=20  leafsize=8  auth_fraction=1.0  num_requests=10
-#
-# Examples:
-#   ./run_remise_sabre.sh 0
-#   ./run_remise_sabre.sh 80 100mbit
-#   ./run_remise_sabre.sh 80 100mbit 16 2 1.0 2
 
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -39,12 +34,18 @@ done
 echo "==> Shaping network: RTT=${RTT}ms ${BW:+bw=$BW}"
 ./netshape.sh set "$RTT" ${BW:+"$BW"}
 
-
 echo "==> Launching: $BIN  log_nitems=$LOG_NITEMS leafsize=$LEAFSIZE auth=$AUTH_FRACTION reqs=$NUM_REQUESTS"
-docker exec -d p0 sh -c "$BIN p0 $ARGS"
+
+# P0 (server) in the background; forward RTT + trial so the CSV is labeled.
+docker exec -d -e REMISE_RTT_MS="$RTT" -e REMISE_TRIAL="${REMISE_TRIAL:-0}" \
+        p0 sh -c "$BIN p0 $ARGS"
+
 sleep 1
-docker exec p1 sh -c "P0_HOST=p0 $BIN p1 $ARGS"
+
+# P1 (client) in the foreground so this script blocks until the run finishes.
+docker exec -e REMISE_RTT_MS="$RTT" -e REMISE_TRIAL="${REMISE_TRIAL:-0}" \
+        p1 sh -c "P0_HOST=p0 $BIN p1 $ARGS"
 
 echo "==> Experiment finished. Clearing shaping."
 ./netshape.sh clear
-echo "==> Results (if written): ./results/online_compute.csv"
+echo "==> Results in ./results/ (online_compute.csv, fig3b_remisebb_sabre.csv, fig4b_remisebb_sabre.csv)."

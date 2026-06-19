@@ -28,6 +28,7 @@
 #include <emmintrin.h>
 #include <type_traits>
 
+#include <cstdlib>   // [FIG3B] std::getenv / std::strtol
 static const AES_KEY default_aes_key{};
 
 // ============================================================================
@@ -150,6 +151,14 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
     uint64_t eval_bytes = 0, audit_bytes = 0, write_bytes = 0;
     size_t authorized_count = 0, cover_count = 0;
 
+    // [FIG3B] microsecond-resolution audit accumulator (ms truncates to 0 at
+    // small DB sizes) + latency/trial labels supplied by run_remise_sabre.sh.
+    uint64_t total_audit_us = 0;
+    const char *rtt_env = std::getenv("REMISE_RTT_MS");
+    const long fig3b_latency_ms = rtt_env ? std::strtol(rtt_env, nullptr, 10) : 0;
+    const char *trial_env = std::getenv("REMISE_TRIAL");
+    const long fig3b_trial = trial_env ? std::strtol(trial_env, nullptr, 10) : 0;
+
     auto run_online = [&](NetPeer &peer, MPCContext &mpc_ctx, auto &key,
                           uint8_t *mask_bits) -> awaitable<void> {
 
@@ -192,7 +201,9 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
 
             auto end_audit = std::chrono::high_resolution_clock::now();
             audit_bytes += (ctx.bytes_sent() - audit_sent_before) + (ctx.bytes_received() - audit_recv_before);
-            total_audit_ms += std::chrono::duration_cast<std::chrono::milliseconds>(end_audit - start_audit).count();
+            const uint64_t audit_ms_this = std::chrono::duration_cast<std::chrono::milliseconds>(end_audit - start_audit).count();
+            total_audit_ms += audit_ms_this;
+            total_audit_us += std::chrono::duration_cast<std::chrono::microseconds>(end_audit - start_audit).count(); // [FIG3B]
 
             // ---- Write (authorized only) ----
             // ONLINE phase = finalize -> FCW exchange -> DB update.
@@ -236,8 +247,12 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
                 total_dbupdate_ms += std::chrono::duration_cast<std::chrono::milliseconds>(t4 - t3).count();
 
                 // ===== ONLINE PHASE ENDS (after DB update) =====
+                // online = audit + finalize + FCW + DB update (eval excluded).
+                // The audit ran before this branch for every request; fold its
+                // duration in here so authorized requests count audit in online.
                 auto online_end = std::chrono::high_resolution_clock::now();
-                total_online_ms += std::chrono::duration_cast<std::chrono::milliseconds>(online_end - online_start).count();
+                total_online_ms += audit_ms_this +
+                    std::chrono::duration_cast<std::chrono::milliseconds>(online_end - online_start).count();
             }
 
             auto end_write = std::chrono::high_resolution_clock::now();
@@ -257,7 +272,8 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
 
         // Online phase = finalize + FCW + DB update only (per authorized request)
         double online_runtime_sec  = double(total_online_ms) / 1000.0;
-        double online_throughput   = (online_runtime_sec > 0) ? authd / online_runtime_sec : 0.0;
+        double online_throughput   = (online_runtime_sec > 0) ? double(num_requests) / online_runtime_sec : 0.0;
+        double online_goodput      = (online_runtime_sec > 0) ? authd / online_runtime_sec : 0.0;
 
         uint64_t total_bytes = eval_bytes + audit_bytes + write_bytes;
 
@@ -285,13 +301,45 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
         std::cout << "\n--- Throughput ---\n";
         std::cout << "Throughput               : " << throughput << " req/sec\n";
         std::cout << "Goodput                  : " << goodput << " authorized req/sec\n";
-        std::cout << "Online goodput           : " << online_throughput
+        std::cout << "Online throughput        : " << online_throughput
+                  << " req/sec   (online phase only)\n";
+        std::cout << "Online goodput           : " << online_goodput
                   << " authorized req/sec   (online phase only)\n";
         std::cout << "========================================\n";
 
         std::ofstream ofs("results/online_compute.csv", std::ios::app);
         ofs << log_nitems << "," << authorized_fraction << "," << num_requests << ","
             << double(total_online_ms) / authd << "\n";
+
+        // [FIG3B] one row per trial: variant,latency_ms,log_nitems,trial,audit_ms
+        //   audit = encrypt2_p0p1 (LowMC MPC) wall-clock; no preproc for Sabre.
+        //   For Fig 3b, num_requests = 1, so this is the single request's audit.
+        {
+            const double audit_ms = double(total_audit_us) / 1000.0 / double(num_requests);
+            std::ofstream f3b("results/fig3b_remisebb_sabre.csv", std::ios::app);
+            f3b << "RemiseBB-Sabre" << ","
+                << fig3b_latency_ms << ","
+                << log_nitems << ","
+                << fig3b_trial << ","
+                << audit_ms << "\n";
+        }
+
+        // [FIG4B] one row per trial: all four curves from a single run.
+        //   throughput/goodput        = on-the-fly DPFs (total_runtime denom)
+        //   online_throughput/goodput = with preproc DPFs (online_runtime denom)
+        //   unauth_frac = 1 - authorized_fraction
+        {
+            const double unauth_frac = 1.0 - authorized_fraction;
+            std::ofstream f4("results/fig4b_remisebb_sabre.csv", std::ios::app);
+            f4 << "RemiseBB-Sabre" << ","
+               << unauth_frac << ","
+               << log_nitems << ","
+               << fig3b_trial << ","
+               << throughput << ","
+               << goodput << ","
+               << online_throughput << ","
+               << online_goodput << "\n";
+        }
 
         delete[] output;
         delete[] t;

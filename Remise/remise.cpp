@@ -1,4 +1,4 @@
- #include <assert.h>
+#include <assert.h>
 #include <bsd/stdlib.h>
 #include <iostream>
 
@@ -21,6 +21,7 @@
 #include <inttypes.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <cstdlib>   // [FIG3A] std::getenv / std::strtol
 
 // ---- Boost.Asio parallelism primitives for running lanes concurrently ----
 #include <boost/asio/co_spawn.hpp>
@@ -308,6 +309,15 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
     size_t authorized_count = 0;
     size_t cover_count = 0;
 
+    // [FIG3A] microsecond-resolution eval/audit accumulators (ms truncates to 0
+    // at small DB sizes); latency + trial labels come from run.sh via env vars.
+    uint64_t total_eval_us = 0;
+    uint64_t total_audit_us = 0;
+    const char *rtt_env = std::getenv("REMISE_RTT_MS");
+    const long fig3a_latency_ms = rtt_env ? std::strtol(rtt_env, nullptr, 10) : 0;
+    const char *trial_env = std::getenv("REMISE_TRIAL");
+    const long fig3a_trial = trial_env ? std::strtol(trial_env, nullptr, 10) : 0;
+
     // -----------------------------------------------------------------
     // Online phase. `lane_peers[i]` / `lane_ctx[i]` are lane i's private
     // connection + MPC context. Within each batch the eval, audit and FCW
@@ -442,6 +452,8 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
             auto end_eval = std::chrono::high_resolution_clock::now();
             total_eval_ms +=
                 std::chrono::duration_cast<std::chrono::milliseconds>(end_eval - start_eval).count();
+            total_eval_us +=
+                std::chrono::duration_cast<std::chrono::microseconds>(end_eval - start_eval).count(); // [FIG3A]
             eval_bytes += (ctx.bytes_sent() - eval_sent_before) +
                           (ctx.bytes_received() - eval_recv_before);
 
@@ -479,6 +491,9 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
             total_audit_ms +=
                 std::chrono::duration_cast<std::chrono::milliseconds>(end_audit - start_audit)
                     .count();
+            total_audit_us +=
+                std::chrono::duration_cast<std::chrono::microseconds>(end_audit - start_audit)
+                    .count(); // [FIG3A]
             audit_bytes += (ctx.bytes_sent() - audit_sent_before) +
                            (ctx.bytes_received() - audit_recv_before);
 
@@ -611,6 +626,39 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
         ofs << log_nitems << "," << authorized_fraction << "," << num_requests << ","
             << double((total_finalize_ms + total_dbupdate_ms)) / double(authorized_count) << ","
             << batch_size << "\n";
+
+        // [FIG3A] one row per trial: variant,latency_ms,log_nitems,trial,online_ms,total_ms
+        //   online = audit only;  total = eval + audit  (per-request average).
+        //   For Fig 3a, num_requests = 1, so this is the single request's timing.
+        {
+            const double denom = double(num_requests);
+            const double online_ms = double(total_audit_us) / 1000.0 / denom;
+            const double total_ms  = double(total_eval_us + total_audit_us) / 1000.0 / denom;
+            std::ofstream f3a("results/fig3a_remisebb.csv", std::ios::app);
+            f3a << "RemiseBB" << ","
+                << fig3a_latency_ms << ","
+                << log_nitems << ","
+                << fig3a_trial << ","
+                << online_ms << ","
+                << total_ms << "\n";
+        }
+
+        // [FIG4A] one row per trial: all four curves from a single run.
+        //   throughput/goodput          = on-the-fly DPFs (total_runtime denom)
+        //   online_throughput/goodput   = with preproc DPFs (online_runtime denom)
+        //   unauth_frac = 1 - authorized_fraction (the figure's x-grouping)
+        {
+            const double unauth_frac = 1.0 - authorized_fraction;
+            std::ofstream f4("results/fig4a_remisebb.csv", std::ios::app);
+            f4 << "RemiseBB" << ","
+               << unauth_frac << ","
+               << log_nitems << ","
+               << fig3a_trial << ","
+               << throughput << ","
+               << goodput << ","
+               << online_throughput << ","
+               << online_goodput << "\n";
+        }
 
         for (size_t i = 0; i < batch_size; ++i) {
             delete[] output[i];
@@ -865,5 +913,3 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
-
-
