@@ -621,6 +621,21 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
         std::cout << "Online goodput           : " << online_goodput << " authorized req/sec\n";
         std::cout << "========================================\n";
 
+std::cerr << "Writing to pacl/write_times.txt\n";
+
+std::ofstream wf("pacl/write_times.txt", std::ios::app);
+
+std::cerr << "opened = " << wf.is_open() << std::endl;
+
+wf << log_nitems << "="
+   << double(total_finalize_ms + total_dbupdate_ms)
+          / double(authorized_count)
+   << std::endl;
+
+wf.close();
+
+std::cerr << "Finished writing\n";
+
         std::ofstream ofs("online_compute.csv", std::ios::app);
         // NOTE: trailing batch_size column appended to the original schema.
         ofs << log_nitems << "," << authorized_fraction << "," << num_requests << ","

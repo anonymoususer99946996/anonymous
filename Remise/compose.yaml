@@ -11,6 +11,7 @@ services:
     networks: [remise-net]
     volumes:
       - ./results:/app/results
+      - ./pacl:/app/pacl
 
   p1:
     image: remise:latest
@@ -26,6 +27,7 @@ services:
     networks: [remise-net]
     volumes:
       - ./results:/app/results
+      - ./pacl:/app/pacl
 
 networks:
   remise-net:
