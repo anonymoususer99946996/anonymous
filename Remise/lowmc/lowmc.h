@@ -10,7 +10,7 @@
 #include <future>               // std::async
 
 #include "../block.h"
-#include "randomness.h"
+//#include "randomness.h"
 #include "streams.h"
 //const size_t rounds = bitsliced_LowMC::num_rounds;
 std::array<block<__m256i> , 128> blinded_c1[29], own_blind[29]; // 128 --> replace to block_len
