@@ -15,7 +15,7 @@ This repository contains the implementation and experimental artifacts for:
 Remise is a two-server authorized anonymous communication system built on
 Distributed Oblivious RAM (DORAM) and Distributed Point Functions (DPFs/FSS). A
 client writes to an anonymous bulletin board only if it is *authorized*, and the
-two servers jointly (a) check that the request is well-formed (the **audit**),
+two servers jointly (a) check that the request is well-formed (the **audit**) (Remise has built-in auditing, while comparitors need this step),
 (b) verify authorization, and (c) apply the write to the shared database —
 all without either server learning which row was written.
 
