@@ -1,0 +1,32 @@
+services:
+  p0:
+    image: remise:latest
+    container_name: p0
+    command: ["sleep", "infinity"]   # stay alive; experiments are launched via docker exec
+    init: true                       # tini as PID 1 -> forwards signals, clean graceful stop
+    cap_add: [NET_ADMIN]             # needed for tc/netem latency shaping
+    security_opt:
+      - apparmor=unconfined          # host AppArmor policy blocks the daemon from killing
+                                     # these containers otherwise (kill via Docker -> permission denied)
+    networks: [remise-net]
+    volumes:
+      - ./results:/app/results
+
+  p1:
+    image: remise:latest
+    container_name: p1
+    command: ["sleep", "infinity"]
+    init: true
+    environment:
+      - P0_HOST=p0                   # P1 resolves P0 by service name on remise-net
+    cap_add: [NET_ADMIN]
+    security_opt:
+      - apparmor=unconfined
+    depends_on: [p0]
+    networks: [remise-net]
+    volumes:
+      - ./results:/app/results
+
+networks:
+  remise-net:
+    driver: bridge
