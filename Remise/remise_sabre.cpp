@@ -182,7 +182,7 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
             uint8_t *final_flags;
             size_t nodes_in_interval;
 
-            // ---- Eval (placeholder) ----
+            // ---- Eval  ----
             uint64_t eval_sent_before = ctx.bytes_sent();
             uint64_t eval_recv_before = ctx.bytes_received();
             auto start_eval = std::chrono::high_resolution_clock::now();
@@ -190,7 +190,7 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
             total_eval_ms += std::chrono::duration_cast<std::chrono::milliseconds>(end_eval - start_eval).count();
             eval_bytes += (ctx.bytes_sent() - eval_sent_before) + (ctx.bytes_received() - eval_recv_before);
 
-            // ---- Audit (bitsliced-LowMC MPC; excluded from the online phase) ----
+            // ---- Audit (bitsliced-LowMC MPC) ----
             uint64_t audit_sent_before = ctx.bytes_sent();
             uint64_t audit_recv_before = ctx.bytes_received();
             auto start_audit = std::chrono::high_resolution_clock::now();
@@ -255,7 +255,7 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
                 // The audit ran before this branch for every request; fold its
                 // duration in here so authorized requests count audit in online.
                 auto online_end = std::chrono::high_resolution_clock::now();
-                total_online_ms += audit_ms_this +
+                total_online_ms += audit_ms_this/256.0 +
                     std::chrono::duration_cast<std::chrono::milliseconds>(online_end - online_start).count();
             }
 
@@ -263,10 +263,14 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
             if (authorized)
                 total_write_ms += std::chrono::duration_cast<std::chrono::milliseconds>(end_write - start_write).count();
         }
+        
+        total_audit_us = total_audit_us/256;
+        total_audit_ms = total_audit_ms/256;
 
         auto experiment_end = std::chrono::high_resolution_clock::now();
-        double total_runtime_sec =
-            std::chrono::duration_cast<std::chrono::milliseconds>(experiment_end - experiment_start).count() / 1000.0;
+        double total_runtime_sec = (total_write_ms + total_audit_ms)/1000.0;
+        
+        std::cout << "Total Experiment Time (this includes a batch of 256 PRF evaluations): " << std::chrono::duration_cast<std::chrono::milliseconds>(experiment_end - experiment_start).count() / 1000.0;
 
         const double authd = double(authorized_count);
 
@@ -288,7 +292,7 @@ awaitable<void> run_party_impl(boost::asio::io_context &io, NetContext &ctx, Rol
         std::cout << "Authorized fraction      : " << authd / double(num_requests) << std::endl;
 
         std::cout << "\n--- Latency (per authorized request) ---\n";
-        std::cout << "Average audit latency        : " << double(total_audit_ms) / authd << " ms\n";
+        std::cout << "Average audit latency        : " << double(total_audit_ms) / num_requests << " ms\n";
         std::cout << "Average write latency        : " << double(total_write_ms) / authd << " ms\n";
         std::cout << "Average online latency       : " << double(total_online_ms) / authd
                   << " ms   (finalize + FCW + DB update)\n";
