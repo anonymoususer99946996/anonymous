@@ -12,7 +12,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 WHICH="${1:-both}"
-MAXK="${2:-26}"
+MAXK="${2:-24}"
 TRIALS="${3:-5}"
 REQS="${4:-20}"
 LEAFSIZE=2          # 32-byte messages

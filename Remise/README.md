@@ -1,430 +1,461 @@
 # Remise: Authorized Anonymous Communication Systems
 
-**Rohan Ravi**
-IIT Kanpur
-[rohanra@cse.iitk.ac.in](mailto:rohanra@cse.iitk.ac.in)
-
-**Paritosh Shukla**
-IIT Kanpur
-[paritoshs24@cse.iitk.ac.in](mailto:paritoshs24@cse.iitk.ac.in)
-
-**Adithya Vadapalli**
-IIT Kanpur
-[avadapalli@cse.iitk.ac.in](mailto:avadapalli@cse.iitk.ac.in)
+**Adithya Vadapalli** — IIT Kanpur — [avadapalli@cse.iitk.ac.in](mailto:avadapalli@cse.iitk.ac.in)
+**Rohan Ravi** — IIT Kanpur — [rohanra@cse.iitk.ac.in](mailto:rohanra@cse.iitk.ac.in)
+**Paritosh Shukla** — IIT Kanpur — [paritoshs24@cse.iitk.ac.in](mailto:paritoshs24@cse.iitk.ac.in)
 
 ---
 
-## Overview
+## 1. Overview
 
 This repository contains the implementation and experimental artifacts for:
 
 > **Remise: Authorized Anonymous Communication Systems**
 
-Remise is an authorized anonymous communication system that combines privacy-preserving communication with cryptographic authorization mechanisms. The implementation includes the complete experimental framework used for evaluating throughput, latency, and communication overhead across different system configurations.
+Remise is a two-server authorized anonymous communication system built on
+Distributed Oblivious RAM (DORAM) and Distributed Point Functions (DPFs/FSS). A
+client writes to an anonymous bulletin board only if it is *authorized*, and the
+two servers jointly (a) check that the request is well-formed (the **audit**),
+(b) verify authorization, and (c) apply the write to the shared database —
+all without either server learning which row was written.
+
+This artifact ships **two server-side variants**, each as a standalone benchmark
+binary:
+
+| Binary           | Paper name           | Authorization mechanism                                  |
+|------------------|----------------------|----------------------------------------------------------|
+| `remise`         | **RemiseBB**         | XOR-tag audit over the proof database                    |
+| `remise_sabre`   | **RemiseBB (Sabre)** | MPC evaluation of a bitsliced **LowMC** PRF (`encrypt2_p0p1`) |
+
+Both variants run the two servers (`p0`, the server/acceptor, and `p1`, the
+client) as **separate processes** that communicate over a TCP socket using a
+coroutine-based asynchronous networking layer. They share an almost identical
+command-line interface, emit the same kinds of measurements, and are driven by
+the same harness.
+
+This README walks through (1) building, (2) the two-container Docker workflow we
+recommend for reproducibility, (3) running a single experiment by hand, (4) the
+conceptual breakdown of what is being measured, and (5) reproducing every figure
+and table, one experiment at a time, including what each result *means* and which
+paper claim it supports.
 
 ---
 
-# Dependencies
+## 2. What the experiments measure (read this first)
 
-The implementation has been tested on:
+Every request a server processes is decomposed into three timed phases. Getting
+these definitions straight is essential for interpreting the plots, because
+different figures report different *combinations* of them.
 
-* Ubuntu 22.04 LTS
-* GCC/G++ 11+
-* C++20 compatible toolchain
+| Phase          | Code                                   | What it is                                                              |
+|----------------|----------------------------------------|-------------------------------------------------------------------------|
+| **preprocess** | `__evalinterval_mpc`                   | DPF interval evaluation ("eval"). The expensive oblivious-access work.  |
+| **audit**      | XOR-tags (`remise`) / `encrypt2_p0p1` (`remise_sabre`) | The request-validity check.                              |
+| **access**     | `finalize` + FCW exchange + DB update  | Producing the final write share and applying it to the shared database. |
+
+In addition, **DPF generation** (`gen`) produces the DPF keys. Generation is an
+**offline** step and is **never** inside any timed region.
+The purpose of the step is just to cleanly produce a DPF structure that can passed to evalinterval. It has no protocol relavance, rather is a hack to get around C++ compile errors. The authors plan to make this clean in the future.  
+
+From these we report two composite timings that differ *only* in whether
+**preprocess (eval)** is counted:
+
+- **online** = `audit + access` (eval **excluded**). This is the "with
+  preprocessed DPFs" setting: it assumes DPF keys were generated and evaluated
+  offline, so the online critical path is just audit + access.
+- **total** (a.k.a. **on-the-fly**) = `eval + audit + access` (eval
+  **included**; generation still excluded). This is the "DPFs produced/evaluated
+  on the fly" setting.
+
+The corresponding rates are:
+
+- **throughput** = requests / wall-clock; **goodput** = authorized-requests /
+  wall-clock — both using the *total* (on-the-fly) time.
+- **online throughput / online goodput** — the same counts divided by the
+  *online* time (eval excluded).
+
+**Important:** both the on-the-fly and the with-preproc numbers come out of a
+**single run**. There is no separate "mode" to select — they are the same work
+measured against two different denominators.
+
+Two more conventions used throughout:
+
+- **Message size (bytes) = 16 × `leafsize`.** A leaf is `std::array<__m128i,
+  leafsize>` and each `__m128i` is 16 bytes. So `leafsize=2` → 32-byte messages,
+  `leafsize=64` → 1024-byte messages, `leafsize=256` → 4096-byte messages.
+- **`auth_fraction` is the fraction of *authorized* requests.** The paper's
+  "*f*% unauthorized traffic" corresponds to `auth_fraction = 1 − f/100`
+  (e.g. 30% unauthorized → `auth_fraction = 0.7`).
 
 ---
 
-## Required System Packages
+## 3. Dependencies
 
-Install the required dependencies using:
+Tested on **Ubuntu 22.04 LTS**, x86-64.
+
+### Hardware
+
+An x86-64 CPU with **AES-NI**, **SSE2**, **SSSE3**, and **AVX2**. AES-NI backs
+the DPF pseudorandom generator; AVX2 (256-bit vectors) backs the bitsliced LowMC
+audit in `remise_sabre`. Verify support with:
 
 ```bash
-sudo apt update
-
-sudo apt install -y \
-    build-essential \
-    g++ \
-    make \
-    pkg-config \
-    libboost-all-dev \
-    libbsd-dev
+lscpu | grep -E "aes|sse2|ssse3|avx2"
 ```
 
+Memory scales with database size and message size. The paper's largest runs
+(2^30 entries) used a 251 GiB machine; the headline points up to 2^26 are
+comfortable with ~16–32 GiB. The paper's reference platform: two Intel Xeon Gold
+6430 CPUs, 251 GiB RAM, 64-bit Linux.
+
+### Software (native build)
+
+- **g++-12** with C++20 (required — the networking layer uses C++20 coroutines;
+  Ubuntu's default g++-11 is not sufficient for our coroutine usage).
+- **Boost 1.81 headers** (required — the async layer uses
+  `boost/asio/experimental/awaitable_operators.hpp`, which is **absent** from
+  Ubuntu 22.04's packaged Boost 1.74). Header-only; no compiled Boost libs are
+  needed for `remise`.
+- **libbsd** (`arc4random`), **OpenSSL / libcrypto** (used by the LowMC audit
+  streams in `remise_sabre`), **iproute2** (`tc`, for latency/bandwidth
+  emulation), **make**.
+
+> The packaged `libboost-all-dev` on Ubuntu 22.04 is Boost 1.74 and will **not**
+> compile the coroutine networking. Use Boost 1.81 headers (point the Makefile at
+> them with `BOOST_ROOT=$HOME/boost-1.81`), or use the Docker path below, which
+> vendors the correct headers automatically.
+
+### Software (Docker — recommended)
+
+Just a working **Docker Engine with the `compose` plugin** on a Linux host. The
+provided `Dockerfile` (based on `ubuntu:22.04`) installs g++-12, the Boost 1.81
+headers, libbsd, OpenSSL, iproute2, and builds both binaries.
+
 ---
 
-## Required Libraries
+## 4. Building
 
-### Boost.Asio
-
-The implementation uses Boost.Asio for asynchronous TCP networking and coroutine-based communication.
-
-Required headers include:
-
-* `boost/asio.hpp`
-* `boost/asio/awaitable.hpp`
-* `boost/asio/use_awaitable.hpp`
-* `boost/asio/experimental/awaitable_operators.hpp`
-
----
-
-### SIMD Intrinsics
-
-The implementation uses Intel SIMD intrinsics for efficient cryptographic computation.
-
-Required instruction sets:
-
-* SSE2
-* SSSE3
-
-Relevant headers:
-
-* `emmintrin.h`
-* `tmmintrin.h`
-
-You can verify CPU support using:
+### Option A — Docker (recommended)
 
 ```bash
-lscpu | grep -E "sse2|ssse3"
+./up.sh            # build the image, then start containers p0 and p1
+./up.sh --rebuild  # force a rebuild
 ```
 
----
+`up.sh` builds an image that compiles **both** binaries (`make remise` and
+`make remise_sabre`), verifies that `/app/remise` and `/app/remise_sabre` exist,
+then starts two long-lived containers — `p0` (server) and `p1` (client) — on a
+private Docker bridge network. The containers idle (`sleep infinity`) until you
+launch an experiment into them. The host directory `./results/` is mounted into
+both containers, so all CSV output lands there.
 
-## Compiler Requirements
-
-The project requires:
-
-* C++20 support
-* Coroutine support
-* SIMD intrinsic support
-
-Example compilation flags:
+Tear down when finished:
 
 ```bash
--std=c++20 -O3 -march=native
+./down.sh          # stop & remove the two containers
+./down.sh --rmi    # also remove the built image
 ```
 
----
+### Option B — native build
 
-# Building
-
-Compile the project using:
+With g++-12 and the Boost 1.81 headers available:
 
 ```bash
-make remise
+make remise        BOOST_ROOT=$HOME/boost-1.81
+make remise_sabre  BOOST_ROOT=$HOME/boost-1.81
 ```
 
+You then run the two parties as two processes (see §6). Network emulation with
+`tc` requires `sudo`/`NET_ADMIN` on the host.
+
+> **Why the containers need elevated capabilities.** To shape latency/bandwidth
+> *inside* the containers, the two services are granted the `NET_ADMIN`
+> capability and run with `apparmor=unconfined`. These are scoped to the two
+> experiment containers on a private bridge network and do not change the host's
+> networking. If you prefer not to grant them, run at zero emulated latency (LAN)
+> — only the latency-dependent rows of the figures need shaping.
+
 ---
 
-# Running a Single Instance
+## 5. Network latency / bandwidth emulation
 
-A single instance of Remise can be executed by launching the two parties (`p0` and `p1`) in separate terminals.
-
-## Usage
+Wide-area conditions are emulated with `tc netem` (delay) and `tbf` (rate),
+applied **inside** the containers by `netshape.sh`. The requested round-trip time
+(RTT) is split across the two endpoints (RTT/2 one-way each).
 
 ```bash
-./remise [p0|p1] <log_num_items> <leafsize> <authorized_fraction> <num_requests>
+./netshape.sh set 30 100mbit   # 30 ms RTT, 100 Mbit/s each direction
+./netshape.sh set 30           # 30 ms RTT, unshaped bandwidth
+./netshape.sh clear            # remove all shaping
+./netshape.sh show             # show current qdisc state
 ```
 
-## Parameters
+The run scripts (§6, §7) call `netshape.sh` for you, so you normally do not need
+to invoke it directly. The paper uses RTTs of **10, 30, and 60 ms**.
 
-* `p0|p1` — Party identifier
-* `log_num_items` — Logarithm (base 2) of the number of database items
-* `leafsize` — ORAM leaf bucket size
-* `authorized_fraction` — Fraction of authorized requests
-* `num_requests` — Total number of requests
+---
 
-## Example
+## 6. Running a single experiment
 
-In the first terminal:
+Both binaries share this interface (only `remise` accepts the optional
+`batch_size`):
+
+```
+remise        [p0|p1] <log_nitems> <leafsize> <auth_fraction> <num_requests> [batch_size]
+remise_sabre  [p0|p1] <log_nitems> <leafsize> <auth_fraction> <num_requests>
+```
+
+| Argument         | Meaning                                                                 |
+|------------------|-------------------------------------------------------------------------|
+| `p0` / `p1`      | Party (server / client). `p0` listens on port 9200; `p1` connects to it.|
+| `log_nitems`     | log2 of the database size (so DB has 2^`log_nitems` rows).              |
+| `leafsize`       | Leaf size; message size in bytes = 16 × `leafsize`.                     |
+| `auth_fraction`  | Fraction of authorized requests, in [0,1].                              |
+| `num_requests`   | Number of requests issued in the run.                                   |
+| `batch_size`     | (`remise` only) requests pipelined concurrently. Default 64; use 1 to disable batching. |
+
+### Via Docker (recommended)
+
+`run.sh` (for `remise`) and `run_remise_sabre.sh` (for `remise_sabre`) shape the
+network, launch `p0` in the background and `p1` in the foreground inside the
+running containers, wait for completion, and clear the shaping:
+
+```
+./run.sh              <RTT_ms> [bw] [log_nitems] [leafsize] [auth_fraction] [num_requests] [batch_size]
+./run_remise_sabre.sh <RTT_ms> [bw] [log_nitems] [leafsize] [auth_fraction] [num_requests]
+```
+
+Example — RemiseBB, 30 ms RTT, 100 Mbit/s, DB 2^20, 32-byte messages, 70%
+authorized, 10 requests, unbatched:
 
 ```bash
+./run.sh 30 100mbit 20 2 0.7 10 1
+```
+
+The run scripts also forward two environment variables into the container so the
+binary can self-label its CSV rows:
+
+- `REMISE_RTT_MS` — the RTT, stamped into the `latency_ms` column.
+- `REMISE_TRIAL` — a trial index, stamped into the `trial` column (the sweep
+  scripts set this per repetition).
+
+### Via native processes (two terminals)
+
+```bash
+# terminal 1 (server)
 ./remise p0 26 2 0.7 10
+# terminal 2 (client)
+P0_HOST=127.0.0.1 ./remise p1 26 2 0.7 10
 ```
 
-In the second terminal:
+`p1` resolves its peer from `P0_HOST` (default `p0` in Docker, set it to the
+server's address/hostname for a two-machine deployment), connecting on port 9200.
+
+Each run prints an **Experiment Summary** (per-phase latencies, bandwidth,
+throughput, goodput) and appends rows to CSV files under `./results/`.
+
+---
+
+## 7. Reproducing the figures and tables
+
+Each experiment has a **sweep script** (collects data into a CSV, one row per
+trial) and a **plot script** (averages over trials with 95% confidence intervals
+and renders the figure). All commands assume the containers are up (`./up.sh`).
+The sweeps default to averaging over **30 trials** for the latency figures and a
+handful of trials for the throughput figures; pass arguments to scale down for a
+quick smoke test.
+
+The plot scripts require Python 3 with `matplotlib`:
 
 ```bash
-./remise p1 26 2 0.7 10
+pip install matplotlib
 ```
 
-This launches a Remise experiment instance with:
+### 7.1 Figure 3a — RemiseBB validity-check time (Claim C1)
 
-* Database size: (2^{26}) items
-* Leaf size: 2
-* Authorized request fraction: 70%
-* Total requests: 10
-
----
-
-# Running Experiments
-
-All experiments can be executed using:
+**What it shows.** Per-request validity-check time of **RemiseBB** vs database
+size, at 10/30/60 ms, for two quantities: **online** (audit only, eval excluded)
+and **total** (eval + audit). Supports **C1**: considering only the online phase,
+RemiseBB attains an order-of-magnitude speedup over Spectrum (PACL), nearing
+80× at 2^26.
 
 ```bash
-sh run-all.sh config.txt
+./sweep_fig3a.sh                 # full sweep (2^16..2^26, 10/30/60 ms, 30 trials)
+./sweep_fig3a.sh 18 3            # quick check: cap at 2^18, 3 trials
+python3 plot_fig3a.py --combined
 ```
 
-The experiment parameters are specified using a configuration file.
+- **Data:** `results/fig3a_remisebb.csv`
+  — columns `variant, latency_ms, log_nitems, trial, online_ms, total_ms`.
+- **Plots:** one per latency plus a combined panel; each shows the *online* and
+  *total* curves vs database size.
+- **Read it as:** the two curves coincide at small DB sizes (eval negligible) and
+  separate as DB grows (eval dominates *total*). To get the C1 speedup factor,
+  divide the Spectrum (PACL) online time by RemiseBB's `online_ms` at the same
+  size; at 2^26 this should be ≈ 80×.
 
----
+### 7.2 Figure 3b — RemiseBB (Sabre) audit time (Claim C2)
 
-## Configuration File Format
+**What it shows.** Audit time of **RemiseBB (Sabre)** — the bitsliced-LowMC MPC
+(`encrypt2_p0p1`) — vs database size, at 10/30/60 ms. Supports **C2**: the audit
+cost is independent of the database size (authorization is O(1), audit is
+O(log n)), so the curve is essentially flat, in contrast to Express (PACL) whose
+authorization grows linearly.
 
-Each line in the configuration file represents a single experiment instance with the following format:
-
-```text
-# LOG_NITEMS LEAFSIZE AUTH_FRAC NUM_REQUESTS NUM_RUNS
+```bash
+./sweep_fig3b.sh
+./sweep_fig3b.sh 18 3            # quick check
+python3 plot_fig3b.py --combined
 ```
 
-Where:
+- **Data:** `results/fig3b_remisebb_sabre.csv`
+  — columns `variant, latency_ms, log_nitems, trial, audit_ms`.
+- **Read it as:** a near-horizontal line at each latency (the audit time is
+  dominated by the fixed LowMC round trips, not the database size).
 
-* `LOG_NITEMS` — Logarithm (base 2) of the number of database items
-* `LEAFSIZE` — ORAM leaf bucket size
-* `AUTH_FRAC` — Fraction of authorized requests
-* `NUM_REQUESTS` — Number of requests per experiment
-* `NUM_RUNS` — Number of repeated executions
+### 7.3 Figures 4a / 4b — throughput & goodput (Claim C3)
 
----
+**What it shows.** For RemiseBB (4a) and RemiseBB (Sabre) (4b): throughput and
+goodput vs database size, in a three-panel row for **30% / 60% / 90%
+unauthorized traffic**, with four curves per panel — *with-preproc*
+throughput/goodput and *on-the-fly* throughput/goodput. Supports **C3**: with
+preprocessed DPFs, more unauthorized traffic *raises* throughput/goodput (cover
+requests skip the expensive access phase); on-the-fly DPFs lower both; and the
+Sabre on-the-fly curve overtakes Express (PACL) at smaller DB sizes as the
+unauthorized fraction grows.
 
-## Example Configuration
-
-```text
-# LOG_NITEMS LEAFSIZE AUTH_FRAC NUM_REQUESTS NUM_RUNS
-
-16 2 0.7 10 5
-18 2 0.7 10 5
-20 2 0.7 10 5
-22 2 0.7 10 5
-24 2 0.7 10 5
-26 2 0.7 10 5
+```bash
+./sweep_fig4.sh both             # both variants; fixed 30 ms, leafsize 2
+./sweep_fig4.sh a 18 2 50        # quick check: RemiseBB only, 2^18, 2 trials, 50 reqs
+python3 plot_fig4.py results/fig4a_remisebb.csv \
+    --out fig4a --title "RemiseBB"
+python3 plot_fig4.py results/fig4b_remisebb_sabre.csv \
+    --out fig4b --title "RemiseBB (Sabre)"
 ```
 
-The above configuration evaluates the system across increasing database sizes while keeping the remaining parameters fixed.
+- **Data:** `results/fig4a_remisebb.csv`, `results/fig4b_remisebb_sabre.csv`
+  — columns `variant, unauth_frac, log_nitems, trial, throughput, goodput,
+  online_throughput, online_goodput`.
+- **Curve mapping:** the `online_*` columns are the *with-preproc* curves; the
+  plain `throughput`/`goodput` columns are the *on-the-fly* curves.
+- The sweep iterates `auth_fraction ∈ {0.7, 0.4, 0.1}` (= 30/60/90%
+  unauthorized) automatically and uses many requests per run (default 200) so the
+  rates are stable.
 
----
+### 7.4 Message-size experiment (Claim C4)
 
-## Sample Output
+**What it shows.** For both variants at fixed DB = 2^20 and 30 ms RTT, the three
+phase times — **preprocess** (eval), **audit**, **access** (finalize + write) —
+as message size varies over `leafsize ∈ {2, 64, 256}` (32 / 1024 / 4096 bytes).
+Supports **C4**: preprocess and audit are independent of message size, while
+access grows linearly with message size.
 
-```text
-===================================================
-RUN CONFIGURATION
-===================================================
-log_nitems        = 26
-leafsize          = 2
-authorized_frac   = 0.7
-num_requests      = 10
-num_runs          = 5
-
-======================================
-throughput           mean = 0.3001   stddev = 0.0010   95CI = ±0.0009
-goodput              mean = 0.1801   stddev = 0.0006   95CI = ±0.0005
-avg_eval_ms          mean = 1941.8600   stddev = 11.2680   95CI = ±9.8768
-avg_audit_ms         mean = 347.8400   stddev = 0.2408   95CI = ±0.2111
-avg_write_ms         mean = 1040.9600   stddev = 3.2677   95CI = ±2.8643
-eval_bandwidth       mean = 1040.0000   stddev = 0.0000   95CI = ±0.0000
-audit_bandwidth      mean = 0.0000   stddev = 0.0000   95CI = ±0.0000
-write_bandwidth      mean = 384.0000   stddev = 0.0000   95CI = ±0.0000
-total_bandwidth      mean = 1424.0000   stddev = 0.0000   95CI = ±0.0000
+```bash
+./sweep_msgsize.sh both
+./sweep_msgsize.sh a 5           # quick check: RemiseBB only, 5 trials
+python3 plot_msgsize.py results/msgsweep_remisebb.csv \
+    --out msg_remisebb --title "RemiseBB"
+python3 plot_msgsize.py results/msgsweep_remisebb_sabre.csv \
+    --out msg_sabre --title "RemiseBB (Sabre)"
 ```
 
-The results of this run will be saved in the `results` folder.
+- **Data:** `results/msgsweep_remisebb.csv`, `results/msgsweep_remisebb_sabre.csv`
+  — columns `variant, latency_ms, leafsize, log_nitems, trial, preprocess_ms,
+  audit_ms, access_ms`.
+- **Plots:** a stacked bar per message size (preprocess / audit / access) with CI
+  error bars; the script also prints a mean ± 95% CI table to stdout.
+- **Read it as:** the preprocess and audit segments stay flat across the three
+  bars; the access segment grows roughly linearly with message size.
+
+### 7.5 Baselines (PACL)
+
+The Spectrum (PACL) and Express (PACL) baseline curves in Figures 3–5 are **not** currently
+part of this artifact; they come from the PACL codebase
+(<https://github.com/sachaservan/pacl>).
+
+**Figure 6** compares Remise against a two-party DORAM. The DORAM implementation
+used is Duoram, available at
+<https://git-crysp.uwaterloo.ca/avadapal/duoram>. Build and run it with the
+parameters reported in the paper, then compare throughput/latency/bandwidth
+against the Remise results. Since Figure 6 can be generated by running 2P-DORAM, it is not a major claim of this paper.
 
 ---
 
-## Metrics
+## 8. Output, metrics, and statistics
 
-The reported metrics correspond to:
+Every run prints an **Experiment Summary** and appends per-trial rows to the
+relevant CSV under `./results/`. The plot scripts aggregate across the repeated
+trials and report, for each point, the **mean** and a **95% confidence
+interval** (computed from the per-trial spread).
 
-* `throughput` — Total completed requests per second
-* `goodput` — Successfully authorized requests per second
-* `avg_eval_ms` — Average evaluation latency (milliseconds)
-* `avg_audit_ms` — Average audit latency (milliseconds)
-* `avg_write_ms` — Average write latency (milliseconds)
-* `eval_bandwidth` — Bandwidth consumed during evaluation
-* `audit_bandwidth` — Bandwidth consumed during auditing
-* `write_bandwidth` — Bandwidth consumed during writes
-* `total_bandwidth` — Total communication bandwidth
+Reported quantities:
 
-For each metric, the framework reports:
-
-* Mean across all runs
-* Standard deviation
-* 95% confidence interval
+- **throughput** — completed requests / second (on-the-fly time).
+- **goodput** — authorized requests / second (on-the-fly time).
+- **online throughput / goodput** — the same, using the online time (eval
+  excluded).
+- **preprocess / eval latency** — DPF interval evaluation time.
+- **audit latency** — validity-check time.
+- **access latency** — finalize + FCW exchange + DB update time.
+- **bandwidth** — bytes moved per phase (eval / audit / write) and in total.
 
 ---
 
-# Networking Notes
+## 9. Implementation notes
 
-Some experiments may require network latency emulation.
+### Two parties, two processes
 
-Latency can be configured using:
+`p0` (server/acceptor) and `p1` (client) run as separate processes and
+communicate only through explicit send/receive operations over a TCP socket;
+synchronization happens solely through protocol messages. In the Docker setup the
+two processes live in two containers on a private bridge network; natively they
+are two terminals (or two machines, via `P0_HOST`). This mirrors a real
+distributed deployment while remaining easy to benchmark.
 
-```
-sh set-latency.sh 30ms
-```
+### Stream-based communication API
 
-For example, the above command sets the network latency to 30 milliseconds.
-
-The latency configuration script internally uses Linux traffic control (`tc`) to emulate network delay.
-
-
----
-## Implementation Details
-
-### Simulating Multiple Parties in a Single Process
-
-For ease of benchmarking and reproducibility, all protocol parties are implemented within a single C++ program (`remiseBB.cpp`). Each party executes in its own thread and communicates through TCP sockets over localhost or across machines depending on the deployment configuration.
-
-Conceptually, the implementation follows the same communication structure as a distributed deployment:
-
-* each party maintains independent local state,
-* parties communicate only through explicit send/receive operations,
-* synchronization occurs only through protocol messages.
-
-This design significantly simplifies experimentation and benchmarking while preserving the logical structure of the distributed protocol.
-
-
----
-
-### Stream-Based Communication API
-
-The networking interface overloads the C++ stream operators:
-
-* `<<` for sending data,
-* `>>` for receiving data.
-
-Example:
+The networking layer overloads the C++ stream operators — `<<` to send, `>>` to
+receive — over the coroutine-based async transport:
 
 ```cpp
-peer << value;
-peer >> value;
+co_await (peer << value);   // send
+co_await (peer >> value);   // receive
+co_await ((peer << a) && (peer >> b));   // overlap a send and a receive
 ```
 
-This abstraction allows protocol code to closely resemble standard C++ stream semantics while hiding the low-level socket serialization logic.
+The operators handle serialization, buffering, transmission, and deserialization
+of protocol data structures, keeping the MPC/protocol code concise. Sends and
+receives can be composed with `&&` to run concurrently; this is used, for
+example, in the FCW exchange.
 
-The overloaded operators internally handle:
+### RemiseBB vs RemiseBB (Sabre), structurally
 
-* serialization,
-* buffering,
-* transmission,
-* and deserialization of protocol data structures.
-
-This approach keeps the protocol implementation concise and improves readability of the MPC and communication code.
+- **`remise`** batches requests across independent "lanes," each with its own TCP
+  connection, and runs eval / audit / FCW-exchange concurrently across lanes
+  (only the shared-DB XOR update is sequential). The audit is an XOR over the
+  proof database.
+- **`remise_sabre`** performs the LowMC-PRF audit (`encrypt2_p0p1`) per request
+  over the same coroutine channel; its eval runs only for authorized requests.
 
 ---
 
-# Reproducing Figures
+## 10. License
 
-All experiments should be executed after configuring the desired network latency:
-
-```bash
-sh set-latency.sh <latency>
-```
-
-The latency values used for each experiment are reported in the evaluation section of the paper.
+Released for academic and research use.
 
 ---
 
-## Figures 3, 4, and 5
+## 11. Warning
 
-Figures 3, 4, and 5 compare Remise against the PACL baselines.
-
-### Remise
-
-Run the Remise benchmark suite:
-
-```bash
-sh run-all.sh config.txt
-```
-
-The configuration file specifies the database size and other experimental parameters.
-
-### MPC-PRF
-
-Build the MPC-PRF implementation:
-
-```bash
-cd mpc-prf
-make
-```
-
-Launch the two parties in separate terminals.
-
-**Terminal 1**
-
-```bash
-./p0
-```
-
-**Terminal 2**
-
-```bash
-./p1
-```
-
-The reported measurements can then be used to generate the corresponding MPC-PRF results appearing in Figures 3, 4, and 5.
+This implementation is provided **solely for research artifact evaluation and
+benchmarking**. It has **not** been hardened for production and may contain
+security vulnerabilities, including (but not limited to) missing input
+validation, insecure networking assumptions, debugging code paths, unsafe memory
+handling, side-channel leakage, and incomplete fault tolerance. Do **not** deploy
+it in production or expose it to untrusted networks.
 
 ---
 
-## Figure 6
+## 12. Contact
 
-Figure 6 compares Remise against a two-party DORAM implementation.
-
-The DORAM implementation used in our evaluation is available at:
-
-```text
-https://git-crysp.uwaterloo.ca/avadapal/duoram
-```
-
-To reproduce Figure 6:
-
-1. Obtain, build, and run the two-party DORAM implementation from the repository above using the corresponding parameters reported in the paper.
-
-2. Compare the resulting throughput, latency, and bandwidth measurements against the Remise results.
-
----
-
-## Output
-
-All benchmarking scripts report:
-
-* Throughput
-* Goodput
-* Evaluation latency
-* Audit latency
-* Write latency
-* Communication bandwidth
-* 95% confidence intervals
-
-These measurements are sufficient to reproduce the figures reported in the paper.
-
-
-# License
-
-This project is released for academic and research use.
-
----
-# Warning
-
-This implementation is provided solely for research artifact evaluation and benchmarking purposes.
-
-The codebase has **not** been hardened for production deployment and may contain numerous security vulnerabilities, including but not limited to:
-
-* Missing input validation
-* Insecure networking assumptions
-* Debugging code paths
-* Unsafe memory handling
-* Side-channel leakage risks
-* Incomplete fault tolerance
-
-This software should **not** be used in production environments or exposed to untrusted networks.
-
----
-
-# Contact
-
-For questions regarding the implementation or paper, please contact:
-
-* Rohan Ravi — [rohanra@cse.iitk.ac.in](mailto:rohanra@cse.iitk.ac.in)
-* Paritosh Shukla — [paritoshs24@cse.iitk.ac.in](mailto:paritoshs24@cse.iitk.ac.in)
-* Adithya Vadapalli — [avadapalli@cse.iitk.ac.in](mailto:avadapalli@cse.iitk.ac.in)
+- Adithya Vadapalli — [avadapalli@cse.iitk.ac.in](mailto:avadapalli@cse.iitk.ac.in)
